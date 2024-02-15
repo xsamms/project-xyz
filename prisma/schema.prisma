@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Agency {
+  id         Int       @id @default(autoincrement())
+  agencyName String
+  regNumber  String
+  industry   String
+  address    String
+  state      String
+  country    String
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int       @unique
+  manager    Manager[]
+  talent     Talent[]
+}
+
+model Manager {
+  id         Int      @id @default(autoincrement())
+  agencyName String
+  regNumber  String
+  industry   String
+  address    String
+  state      String
+  country    String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int      @unique
+  agency     Agency?  @relation(fields: [agencyId], references: [id])
+  agencyId   Int
+  talent     Talent[]
+}
+
+model Talent {
+  id           Int      @id @default(autoincrement())
+  stageName    String?  @unique
+  industry     String
+  bookingPrice Int?
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int      @unique
+  agency       Agency?  @relation(fields: [agencyId], references: [id])
+  agencyId     Int
+  manager      Manager? @relation(fields: [managerId], references: [id])
+  managerId    Int
+}
+
+model User {
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  password         String
+  fullName         String?
+  mobileNumber     String?  @unique
+  verificationTpye String?
+  role             Role     @default(USER)
+  isEmailVerified  Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  Token            Token[]
+  agency           Agency?
+  manager          Manager?
+  talent           Talent?
+}
+
+model Token {
+  id          Int       @id @default(autoincrement())
+  token       String
+  type        TokenType
+  expires     DateTime
+  blacklisted Boolean
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TokenType {
+  ACCESS
+  REFRESH
+  RESET_PASSWORD
+  VERIFY_EMAIL
+}
