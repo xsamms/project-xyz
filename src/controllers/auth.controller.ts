@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync';
-import { authService, userService, tokenService, emailService } from '../services';
+import { authService, userService, tokenService, emailService, agencyService } from '../services';
 import exclude from '../utils/exclude';
 import { User } from '@prisma/client';
 import { error } from 'console';
@@ -11,7 +11,8 @@ const registerAsAgency = catchAsync(async (req, res) => {
   const user = await userService.createUserWithEmail(email, password, fullName, mobileNumber, verificationType);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user: userWithoutPassword, tokens });
+  const agency = await agencyService.createAgency(user.id, agencyName, regNumber, industry, address, state, country)
+  res.status(httpStatus.CREATED).send({ user: userWithoutPassword, tokens, agency });
 });
 
 const registerWithPhone = catchAsync(async (req, res) => {
