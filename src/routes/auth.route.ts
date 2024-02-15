@@ -6,11 +6,9 @@ import auth from '../middlewares/auth';
 
 const router = express.Router();
 
-router.post('/register-as-agency', validate(authValidation.registerAsAgency), authController.registerWithEmail);
-router.post('/register-with-phone', validate(authValidation.registerWithPhone), authController.registerWithPhone);
-router.post('/firebase', validate(authValidation.registerWithFirebase), authController.firebaseAuth);
+router.post('/register-as-agency', validate(authValidation.registerAsAgency), authController.registerAsAgency);
+router.post('/register-as-manager', validate(authValidation.registerAsManager), authController.registerAsManager);
 router.post('/login-with-email', validate(authValidation.loginWithEmail), authController.loginWithEmail);
-router.post('/login-with-phone', validate(authValidation.loginWithPhone), authController.loginWithPhone);
 router.post('/logout', validate(authValidation.logout), authController.logout);
 router.post(
   '/refresh-tokens',

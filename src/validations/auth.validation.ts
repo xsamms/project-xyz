@@ -19,11 +19,19 @@ const registerAsAgency = {
 };
 
 
-const registerWithFirebase = {
+const registerAsManager = {
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    telephone: Joi.string().allow("", null),
-    name: Joi.string().allow("", null)
+    password: Joi.string().required().custom(password),
+    fullName: Joi.string(),
+    mobileNumber: Joi.string(),
+    verificationType: Joi.string(),
+    agencyName: Joi.string(),
+    regNumber: Joi.string(),
+    industry: Joi.string(),
+    address: Joi.string(),
+    state: Joi.string(),
+    country: Joi.string()
   })
 };
 
@@ -77,7 +85,7 @@ const verifyEmail = {
 
 export default {
   registerAsAgency,
-  registerWithFirebase,
+  registerAsManager,
   loginWithEmail,
   loginWithPhone,
   logout,

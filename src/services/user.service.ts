@@ -9,12 +9,12 @@ import { encryptPassword } from '../utils/encryption';
  * @param {Object} userBody
  * @returns {Promise<User>}
  */
-const createUserWithEmail = async (
+const createUser = async (
   email: string,
   password: string,
-  fullName?: string,
-  mobileNumber?: string,
-  verificationType?: string,
+  fullName: string,
+  mobileNumber: string,
+  verificationType: string,
   role: Role = Role.USER
 ): Promise<User> => {
   if (await getUserByEmail(email)) {
@@ -27,31 +27,6 @@ const createUserWithEmail = async (
       fullName,
       mobileNumber,
       verificationType,
-      role
-    }
-  });
-};
-
-
-/**
- * Create a user
- * @param {Object} userBody
- * @returns {Promise<User>}
- */
-const createUserWithFirebase = async (
-  email: string,
-  password: string,
-  telephone?: string,
-  name?: string,
-  role: Role = Role.USER
-): Promise<User> => {
-  let randPhone = "+234" + Math.floor(Math.random() * 9000000000);
-  return prisma.user.create({
-    data: {
-      email,
-      password: await encryptPassword(password),
-      telephone: telephone ? telephone : randPhone,
-      name,
       role
     }
   });
@@ -78,9 +53,10 @@ const queryUsers = async <Key extends keyof User>(
   keys: Key[] = [
     'id',
     'email',
-    'telephone',
-    'name',
     'password',
+    'fullName',
+    'mobileNumber',
+    'verificationType',
     'role',
     'isEmailVerified',
     'createdAt',
@@ -112,11 +88,12 @@ const getUserById = async <Key extends keyof User>(
   keys: Key[] = [
     'id',
     'email',
-    'telephone',
-    'name',
+    'password',
+    'fullName',
+    'mobileNumber',
+    'verificationType',
     'role',
     'isEmailVerified',
-    'isPhoneVerified',
     'createdAt',
     'updatedAt'
   ] as Key[]
@@ -138,12 +115,12 @@ const getUserByEmail = async <Key extends keyof User>(
   keys: Key[] = [
     'id',
     'email',
-    'telephone',
-    'name',
     'password',
+    'fullName',
+    'mobileNumber',
+    'verificationType',
     'role',
     'isEmailVerified',
-    'isPhoneVerified',
     'createdAt',
     'updatedAt'
   ] as Key[]
@@ -155,33 +132,6 @@ const getUserByEmail = async <Key extends keyof User>(
 };
 
 
-/**
- * Get user by email
- * @param {string} telephone
- * @param {Array<Key>} keys
- * @returns {Promise<Pick<User, Key> | null>}
- */
-const getUserByPhone = async <Key extends keyof User>(
-  telephone: string,
-  keys: Key[] = [
-    'id',
-    'telephone',
-    'email',
-    'name',
-    'password',
-    'role',
-    'isEmailVerified',
-    'isPhoneVerified',
-    'createdAt',
-    'updatedAt'
-  ] as Key[]
-): Promise<Pick<User, Key> | null> => {
-  return prisma.user.findUnique({
-    where: { telephone },
-    select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
-  }) as Promise<Pick<User, Key> | null>;
-};
-
 
 /**
  * Update user by id
@@ -192,9 +142,9 @@ const getUserByPhone = async <Key extends keyof User>(
 const updateUserById = async <Key extends keyof User>(
   userId: number,
   updateBody: Prisma.UserUpdateInput,
-  keys: Key[] = ['id', 'email', 'name', 'role'] as Key[]
+  keys: Key[] = ['id', 'email', 'fullName', 'mobileNumber', 'verificationTpye', 'role'] as Key[]
 ): Promise<Pick<User, Key> | null> => {
-  const user = await getUserById(userId, ['id', 'email', 'name']);
+  const user = await getUserById(userId, ['id', 'email', 'fullName', 'mobileNumber', 'verificationType', 'role']);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
@@ -232,13 +182,10 @@ const deleteUserById = async (userId: number): Promise<User> => {
 };
 
 export default {
-  createUserWithEmail,
-  createUserWithPhone,
-  createUserWithFirebase,
+  createUser,
   queryUsers,
   getUserById,
   getUserByEmail,
-  getUserByPhone,
   updateUserById,
   deleteUserById
 };

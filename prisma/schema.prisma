@@ -59,7 +59,7 @@ model User {
   password         String
   fullName         String?
   mobileNumber     String?  @unique
-  verificationTpye String?
+  verificationType String?
   role             Role     @default(USER)
   isEmailVerified  Boolean  @default(false)
   createdAt        DateTime @default(now())

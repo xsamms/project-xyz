@@ -24,46 +24,17 @@ const loginUserWithEmailAndPassword = async (
   const user = await userService.getUserByEmail(email, [
     'id',
     'email',
-    'name',
-    'telephone',
     'password',
+    'fullName',
+    'mobileNumber',
+    'verificationType',
     'role',
     'isEmailVerified',
-    'isPhoneVerified',
     'createdAt',
     'updatedAt'
   ]);
   if (!user || !(await isPasswordMatch(password, user.password as string))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
-  }
-  return exclude(user, ['password']);
-};
-
-
-/**
- * Login with username and password
- * @param {string} telephone
- * @param {string} password
- * @returns {Promise<Omit<User, 'password'>>}
- */
-const loginUserWithPhoneAndPassword = async (
-  telephone: string,
-  password: string
-): Promise<Omit<User, 'password'>> => {
-  const user = await userService.getUserByPhone(telephone, [
-    'id',
-    'email',
-    'name',
-    'telephone',
-    'password',
-    'role',
-    'isEmailVerified',
-    'isPhoneVerified',
-    'createdAt',
-    'updatedAt'
-  ]);
-  if (!user || !(await isPasswordMatch(password, user.password as string))) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect telephone or password');
   }
   return exclude(user, ['password']);
 };
@@ -195,7 +166,6 @@ const verifyOTP = (params: any, callback: any) => {
 
 export default {
   loginUserWithEmailAndPassword,
-  loginUserWithPhoneAndPassword,
   isPasswordMatch,
   encryptPassword,
   logout,

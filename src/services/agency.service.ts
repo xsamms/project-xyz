@@ -12,11 +12,11 @@ import ApiError from '../utils/ApiError';
 const createAgency = async (
     userId: number,
     agencyName: string,
-    regNumber: number,
-    industry?: string,
-    address?: string,
-    state?: string,
-    country?: string
+    regNumber: string,
+    industry: string,
+    address: string,
+    state: string,
+    country: string
 ): Promise<Agency> => {
   return prisma.agency.create({
     data: {

@@ -8,37 +8,21 @@ import passport from 'passport';
 
 const registerAsAgency = catchAsync(async (req, res) => {
   const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
-  const user = await userService.createUserWithEmail(email, password, fullName, mobileNumber, verificationType);
+  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
   const agency = await agencyService.createAgency(user.id, agencyName, regNumber, industry, address, state, country)
   res.status(httpStatus.CREATED).send({ user: userWithoutPassword, tokens, agency });
 });
 
-const registerWithPhone = catchAsync(async (req, res) => {
-  const { telephone, password, name } = req.body;
-  const user = await userService.createUserWithPhone(telephone, password, name);
+const registerAsManager = catchAsync(async (req, res) => {
+  const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
+  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user: userWithoutPassword, tokens });
 });
 
-const firebaseAuth = catchAsync(async (req, res) => {
-  const {email, telephone, name } = req.body
-  const password = email + name
-  const userEmail = await userService.getUserByEmail(email)
-
-  if(userEmail){
-    const user = await authService.loginUserWithEmailAndPassword(email, password);
-    const tokens = await tokenService.generateAuthTokens(user);
-    return res.send({ user, tokens });
-  } else {
-    const user = await userService.createUserWithFirebase(email, password, telephone, name);
-    const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
-    const tokens = await tokenService.generateAuthTokens(user);
-    return res.status(httpStatus.CREATED).send({ user: userWithoutPassword, tokens });
-  }
-});
 
 const loginWithEmail = catchAsync(async (req, res) => {
   const { email, password } = req.body;
@@ -47,12 +31,6 @@ const loginWithEmail = catchAsync(async (req, res) => {
   res.send({ user, tokens });
 });
 
-const loginWithPhone = catchAsync(async (req, res) => {
-  const { telephone, password } = req.body;
-  const user = await authService.loginUserWithPhoneAndPassword(telephone, password);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
-});
 
 const logout = catchAsync(async (req, res) => {
   await authService.logout(req.body.refreshToken);
@@ -112,10 +90,8 @@ const verifyOTP = catchAsync(async (req, res) => {
 
 export default {
   registerAsAgency,
-  registerWithPhone,
-  firebaseAuth,
+  registerAsManager,
   loginWithEmail,
-  loginWithPhone,
   logout,
   refreshTokens,
   forgotPassword,
