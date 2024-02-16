@@ -2,6 +2,7 @@ import express from 'express';
 import authRoute from './auth.route';
 import userRoute from './user.route';
 import agencyRoute from './agency.route';
+import managerRoute from './manager.route';
 import docsRoute from './docs.route';
 import config from '../config/config';
 
@@ -19,6 +20,10 @@ const defaultRoutes = [
   {
     path: '/agency',
     route: agencyRoute
+  },
+  {
+    path: '/manager',
+    route: managerRoute
   }
 ];
 

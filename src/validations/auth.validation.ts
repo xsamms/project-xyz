@@ -4,6 +4,7 @@ import { empty } from '@prisma/client/runtime/library';
 
 const registerAsAgency = {
   body: Joi.object().keys({
+    userId: Joi.number(),
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     fullName: Joi.string(),
@@ -21,6 +22,8 @@ const registerAsAgency = {
 
 const registerAsManager = {
   body: Joi.object().keys({
+    userId: Joi.number(),
+    agencyId: Joi.number(),
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     fullName: Joi.string(),
