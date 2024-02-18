@@ -11,7 +11,6 @@ import ApiError from '../utils/ApiError';
  */
 const createManager = async (
     userId: number,
-    agencyId: number,
     agencyName: string,
     regNumber: string,
     industry: string,
@@ -22,7 +21,6 @@ const createManager = async (
   return prisma.manager.create({
     data: {
       userId,
-      agencyId,
       agencyName,
       regNumber,
       industry,
@@ -92,7 +90,6 @@ const getManagerById = async <Key extends keyof Manager>(
     'id',
     'agencyName',
     'userId',
-    'agencyId',
     'regNumber',
     'industry',
     'address',
@@ -119,9 +116,9 @@ const getManagerById = async <Key extends keyof Manager>(
 const updateManagerById = async <Key extends keyof Manager>(
   managerId: number,
   updateBody: Prisma.ManagerUpdateInput,
-  keys: Key[] = ['id', 'agencyName', 'regNumber', 'industry', 'address', 'state', 'country', 'userId', 'agencyId'] as Key[]
+  keys: Key[] = ['id', 'agencyName', 'regNumber', 'industry', 'address', 'state', 'country', 'userId'] as Key[]
 ): Promise<Pick<Manager, Key> | null> => {
-  const manager = await getManagerById(managerId, ['id', 'agencyName', 'regNumber', 'industry', 'address', 'state', 'country', 'userId', 'agencyId']);
+  const manager = await getManagerById(managerId, ['id', 'agencyName', 'regNumber', 'industry', 'address', 'state', 'country', 'userId']);
   if (!manager) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Manager not found');
   }

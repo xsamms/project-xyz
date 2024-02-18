@@ -8,7 +8,8 @@ const router = express.Router();
 
 router.post('/register-as-agency', validate(authValidation.registerAsAgency), authController.registerAsAgency);
 router.post('/register-as-manager', validate(authValidation.registerAsManager), authController.registerAsManager);
-router.post('/login-with-email', validate(authValidation.loginWithEmail), authController.loginWithEmail);
+router.post('/register-as-talent', validate(authValidation.registerAsTalent), authController.registerAsTalent);
+router.post('/login', validate(authValidation.login), authController.login);
 router.post('/logout', validate(authValidation.logout), authController.logout);
 router.post(
   '/refresh-tokens',

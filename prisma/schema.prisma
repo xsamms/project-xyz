@@ -12,17 +12,27 @@ datasource db {
 }
 
 model Agency {
-  id         Int       @id @default(autoincrement())
-  agencyName String
-  regNumber  String
-  industry   String
-  address    String
-  state      String
-  country    String
-  user       User      @relation(fields: [userId], references: [id])
-  userId     Int       @unique
-  manager    Manager[]
-  talent     Talent[]
+  id            Int              @id @default(autoincrement())
+  agencyName    String
+  regNumber     String
+  industry      String
+  address       String
+  state         String
+  country       String
+  user          User             @relation(fields: [userId], references: [id])
+  userId        Int              @unique
+  talent        Talent[]
+  agencyManager Agency_Manager[]
+}
+
+model Agency_Manager {
+  id       Int      @id @default(autoincrement())
+  gender   String
+  userId   Int      @unique
+  user     User     @relation(fields: [userId], references: [id])
+  agencyId Int      @unique
+  agency   Agency   @relation(fields: [agencyId], references: [id])
+  talent   Talent[]
 }
 
 model Manager {
@@ -35,39 +45,22 @@ model Manager {
   country    String
   user       User     @relation(fields: [userId], references: [id])
   userId     Int      @unique
-  agency     Agency?  @relation(fields: [agencyId], references: [id])
-  agencyId   Int?
   talent     Talent[]
 }
 
 model Talent {
-  id           Int      @id @default(autoincrement())
-  stageName    String?  @unique
-  industry     String
-  bookingPrice Int?
-  user         User     @relation(fields: [userId], references: [id])
-  userId       Int      @unique
-  agency       Agency?  @relation(fields: [agencyId], references: [id])
-  agencyId     Int
-  manager      Manager? @relation(fields: [managerId], references: [id])
-  managerId    Int
-}
-
-model User {
-  id               Int      @id @default(autoincrement())
-  email            String   @unique
-  password         String
-  fullName         String?
-  mobileNumber     String?  @unique
-  verificationType String?
-  role             Role     @default(USER)
-  isEmailVerified  Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  Token            Token[]
-  agency           Agency?
-  manager          Manager?
-  talent           Talent?
+  id              Int             @id @default(autoincrement())
+  userId          Int             @unique
+  agencyId        Int?            @unique
+  managerId       Int?            @unique
+  agencyManagerId Int?            @unique
+  stageName       String          @unique
+  industry        String
+  bookingPrice    Int?
+  user            User            @relation(fields: [userId], references: [id])
+  agency          Agency?         @relation(fields: [agencyId], references: [id])
+  manager         Manager?        @relation(fields: [managerId], references: [id])
+  agencyManager   Agency_Manager? @relation(fields: [agencyManagerId], references: [id])
 }
 
 model Token {
@@ -79,6 +72,24 @@ model Token {
   createdAt   DateTime  @default(now())
   user        User      @relation(fields: [userId], references: [id])
   userId      Int
+}
+
+model User {
+  id               Int             @id @default(autoincrement())
+  email            String          @unique
+  password         String
+  fullName         String?
+  mobileNumber     String?         @unique
+  verificationType String?
+  role             Role            @default(USER)
+  isEmailVerified  Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  Token            Token[]
+  agency           Agency?
+  manager          Manager?
+  talent           Talent?
+  agencyManager    Agency_Manager?
 }
 
 enum Role {

@@ -5,8 +5,8 @@ import catchAsync from '../utils/catchAsync';
 import { managerService } from '../services';
 
 const createManager = catchAsync(async (req, res) => {
-  const { agencyName, regNumber, industry, address, state, country, userId, agencyId } = req.body;
-  const manager = await managerService.createManager(agencyName, regNumber, industry, address, state, country, userId, agencyId);
+  const { agencyName, regNumber, industry, address, state, country, userId} = req.body;
+  const manager = await managerService.createManager(agencyName, regNumber, industry, address, state, country, userId);
   res.status(httpStatus.CREATED).send(manager);
 });
 

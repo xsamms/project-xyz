@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync';
-import { authService, userService, tokenService, emailService, agencyService, managerService } from '../services';
+import { authService, userService, tokenService, emailService, agencyService, managerService, talentService } from '../services';
 import exclude from '../utils/exclude';
 import { User } from '@prisma/client';
 import { error } from 'console';
@@ -16,16 +16,26 @@ const registerAsAgency = catchAsync(async (req, res) => {
 });
 
 const registerAsManager = catchAsync(async (req, res) => {
-  const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country, agencyId } = req.body;
+  const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
   const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
-  const manager = await managerService.createManager(user.id, agencyId, agencyName, regNumber, industry, address, state, country)
+  const manager = await managerService.createManager(user.id, agencyName, regNumber, industry, address, state, country)
   res.status(httpStatus.CREATED).send({ user: userWithoutPassword, tokens, manager });
 });
 
 
-const loginWithEmail = catchAsync(async (req, res) => {
+const registerAsTalent = catchAsync(async (req, res) => {
+  const { email, password, fullName, mobileNumber, verificationType, stageName, industry, bookingPrice, agencyId, managerId, agencyManagerId } = req.body;
+  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType);
+  const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
+  const tokens = await tokenService.generateAuthTokens(user);
+  const talent = await talentService.createTalent(user.id, agencyId, managerId, agencyManagerId, stageName, industry, bookingPrice)
+  res.status(httpStatus.CREATED).send({ user: userWithoutPassword, tokens, talent });
+});
+
+
+const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
   const tokens = await tokenService.generateAuthTokens(user);
@@ -92,7 +102,8 @@ const verifyOTP = catchAsync(async (req, res) => {
 export default {
   registerAsAgency,
   registerAsManager,
-  loginWithEmail,
+  registerAsTalent,
+  login,
   logout,
   refreshTokens,
   forgotPassword,

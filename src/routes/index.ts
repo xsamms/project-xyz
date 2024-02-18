@@ -3,6 +3,7 @@ import authRoute from './auth.route';
 import userRoute from './user.route';
 import agencyRoute from './agency.route';
 import managerRoute from './manager.route';
+import talentRoute from './talent.route';
 import docsRoute from './docs.route';
 import config from '../config/config';
 
@@ -10,20 +11,24 @@ const router = express.Router();
 
 const defaultRoutes = [
   {
-    path: '/auth',
-    route: authRoute
-  },
-  {
-    path: '/users',
-    route: userRoute
-  },
-  {
     path: '/agency',
     route: agencyRoute
   },
   {
+    path: '/auth',
+    route: authRoute
+  },
+  {
     path: '/manager',
     route: managerRoute
+  },
+  {
+    path: '/talents',
+    route: talentRoute
+  },
+  {
+    path: '/users',
+    route: userRoute
   }
 ];
 

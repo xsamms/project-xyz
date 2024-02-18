@@ -23,7 +23,6 @@ const registerAsAgency = {
 const registerAsManager = {
   body: Joi.object().keys({
     userId: Joi.number(),
-    agencyId: Joi.number(),
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     fullName: Joi.string(),
@@ -38,19 +37,29 @@ const registerAsManager = {
   })
 };
 
-const loginWithEmail = {
+const registerAsTalent = {
+  body: Joi.object().keys({
+    userId: Joi.number(),
+    agencyId: Joi.number(),
+    managerId: Joi.number(),
+    email: Joi.string().required().email(),
+    password: Joi.string().required().custom(password),
+    fullName: Joi.string(),
+    mobileNumber: Joi.string(),
+    verificationType: Joi.string(),
+    stageName: Joi.string(),
+    bookingPrice: Joi.number(),
+    industry: Joi.string()
+  })
+};
+
+const login = {
   body: Joi.object().keys({
     email: Joi.string().required(),
     password: Joi.string().required()
   })
 };
 
-const loginWithPhone = {
-  body: Joi.object().keys({
-    telephone: Joi.string().required(),
-    password: Joi.string().required()
-  })
-};
 
 const logout = {
   body: Joi.object().keys({
@@ -89,8 +98,8 @@ const verifyEmail = {
 export default {
   registerAsAgency,
   registerAsManager,
-  loginWithEmail,
-  loginWithPhone,
+  registerAsTalent,
+  login,
   logout,
   refreshTokens,
   forgotPassword,
