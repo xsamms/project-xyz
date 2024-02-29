@@ -2,8 +2,12 @@ import express from 'express';
 import authRoute from './auth.route';
 import userRoute from './user.route';
 import agencyRoute from './agency.route';
+import agencyManagerRoute from './agencyManager.route';
 import managerRoute from './manager.route';
 import talentRoute from './talent.route';
+import calenderRoute from './calender.route';
+import inquiryRoute from './inquiry.route';
+import invoiceRoute from './invoice.route';
 import docsRoute from './docs.route';
 import config from '../config/config';
 
@@ -15,8 +19,24 @@ const defaultRoutes = [
     route: agencyRoute
   },
   {
+    path: '/agencyManaher',
+    route: agencyManagerRoute
+  },
+  {
     path: '/auth',
     route: authRoute
+  },
+  {
+    path: '/calender',
+    route: calenderRoute
+  },
+  {
+    path: '/inquiry',
+    route: inquiryRoute
+  },
+  {
+    path: '/invoice',
+    route: invoiceRoute
   },
   {
     path: '/manager',

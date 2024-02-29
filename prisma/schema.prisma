@@ -12,55 +12,152 @@ datasource db {
 }
 
 model Agency {
-  id            Int              @id @default(autoincrement())
+  id            Int             @id @default(autoincrement())
+  userId        Int             @unique
+  teams         Team[]
   agencyName    String
   regNumber     String
   industry      String
   address       String
   state         String
   country       String
-  user          User             @relation(fields: [userId], references: [id])
-  userId        Int              @unique
+  user          User            @relation(fields: [userId], references: [id])
   talent        Talent[]
-  agencyManager Agency_Manager[]
+  agencyManager AgencyManager[]
+  calender      Calender?
+  inquiry       Inquiry[]
+  invoice       Invoice[]
 }
 
-model Agency_Manager {
-  id       Int      @id @default(autoincrement())
+model AgencyManager {
+  id       Int       @id @default(autoincrement())
+  userId   Int       @unique
+  agencyId Int       @unique
   gender   String
-  userId   Int      @unique
-  user     User     @relation(fields: [userId], references: [id])
-  agencyId Int      @unique
-  agency   Agency   @relation(fields: [agencyId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+  agency   Agency    @relation(fields: [agencyId], references: [id])
   talent   Talent[]
+  calender Calender?
+  inquiry  Inquiry[]
+  Team     Team[]
+}
+
+model Calender {
+  id              Int            @id @default(autoincrement())
+  talentId        Int            @unique
+  managerId       Int            @unique
+  agencyId        Int            @unique
+  agencyManagerId Int            @unique
+  eventTitle      String
+  description     String
+  eventVenue      String
+  eventCity       String
+  eventCountry    String
+  eventDate       DateTime       @db.Date
+  eventTime       DateTime       @db.Time
+  talent          Talent?        @relation(fields: [talentId], references: [id])
+  manager         Manager?       @relation(fields: [managerId], references: [id])
+  agency          Agency?        @relation(fields: [agencyId], references: [id])
+  agencyManager   AgencyManager? @relation(fields: [agencyManagerId], references: [id])
+}
+
+model Inquiry {
+  id              Int            @id @default(autoincrement())
+  talentId        Int            @unique
+  managerId       Int            @unique
+  agencyId        Int            @unique
+  agencyManagerId Int            @unique
+  fullName        String
+  stageName       String
+  email           String         @unique
+  phoneNumber     String
+  type            InquiryType    @default(Booking)
+  subject         String
+  message         String
+  attachment      String[]
+  eventType       String
+  eventVenue      String
+  eventCity       String
+  eventCountry    String
+  eventDate       DateTime
+  eventTime       DateTime
+  talent          Talent?        @relation(fields: [talentId], references: [id])
+  manager         Manager?       @relation(fields: [managerId], references: [id])
+  agency          Agency?        @relation(fields: [agencyId], references: [id])
+  agencyManager   AgencyManager? @relation(fields: [agencyManagerId], references: [id])
+}
+
+model Invoice {
+  id           Int      @id @default(autoincrement())
+  talentId     Int      @unique
+  managerId    Int      @unique
+  agencyId     Int      @unique
+  clientName   String
+  clientEmail  String   @unique
+  eventType    String
+  eventDate    DateTime
+  billOption   String
+  fee          Int
+  logisticInfo String
+  logisticFee  Int
+  TnC          String
+  totalFee     Int
+  talent       Talent?  @relation(fields: [talentId], references: [id])
+  manager      Manager? @relation(fields: [managerId], references: [id])
+  agency       Agency?  @relation(fields: [agencyId], references: [id])
 }
 
 model Manager {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   agencyName String
   regNumber  String
   industry   String
   address    String
   state      String
   country    String
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int      @unique
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int       @unique
   talent     Talent[]
+  calender   Calender?
+  inquiry    Inquiry[]
+  invoice    Invoice[]
+}
+
+model Message {
+  id      Int    @id @default(autoincrement())
+  email   String @unique
+  subject String
+  message String
+  usersId Int
+  user    User   @relation(fields: [usersId], references: [id])
 }
 
 model Talent {
-  id              Int             @id @default(autoincrement())
-  userId          Int             @unique
-  agencyId        Int?            @unique
-  managerId       Int?            @unique
-  agencyManagerId Int?            @unique
-  stageName       String          @unique
+  id              Int            @id @default(autoincrement())
+  userId          Int            @unique
+  agencyId        Int?           @unique
+  managerId       Int?           @unique
+  agencyManagerId Int?           @unique
+  stageName       String         @unique
   industry        String
   bookingPrice    Int?
-  user            User            @relation(fields: [userId], references: [id])
-  agency          Agency?         @relation(fields: [agencyId], references: [id])
-  manager         Manager?        @relation(fields: [managerId], references: [id])
-  agencyManager   Agency_Manager? @relation(fields: [agencyManagerId], references: [id])
+  user            User           @relation(fields: [userId], references: [id])
+  agency          Agency?        @relation(fields: [agencyId], references: [id])
+  manager         Manager?       @relation(fields: [managerId], references: [id])
+  agencyManager   AgencyManager? @relation(fields: [agencyManagerId], references: [id])
+  calender        Calender?
+  inquiry         Inquiry[]
+  invoice         Invoice[]
+  teams           Team[]
+}
+
+model Team {
+  id             Int             @id @default(autoincrement())
+  title          String
+  status         Boolean
+  agency         Agency[]
+  talents        Talent[]
+  agencyManagers AgencyManager[]
 }
 
 model Token {
@@ -75,21 +172,28 @@ model Token {
 }
 
 model User {
-  id               Int             @id @default(autoincrement())
-  email            String          @unique
+  id               Int            @id @default(autoincrement())
+  email            String         @unique
   password         String
   fullName         String?
-  mobileNumber     String?         @unique
+  mobileNumber     String?        @unique
   verificationType String?
-  role             Role            @default(USER)
-  isEmailVerified  Boolean         @default(false)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  role             Role           @default(USER)
+  isEmailVerified  Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
   Token            Token[]
   agency           Agency?
   manager          Manager?
   talent           Talent?
-  agencyManager    Agency_Manager?
+  agencyManager    AgencyManager?
+  messages         Message[]
+}
+
+enum InquiryType {
+  Booking
+  Proposal
+  Collaboration
 }
 
 enum Role {
