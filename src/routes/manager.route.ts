@@ -1,5 +1,5 @@
 import express from 'express';
-import manager from '../middlewares/manager';
+import auth from '../middlewares/auth';
 import validate from '../middlewares/validate';
 import { managerValidation } from '../validations';
 import { managerController } from '../controllers';
@@ -8,14 +8,14 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(manager('manageManagers'), validate(managerValidation.createManager), managerController.createManager)
-  .get(manager('getManagers'), validate(managerValidation.getManagers), managerController.getManagers);
+  .post(auth('manageManagers'), validate(managerValidation.createManager), managerController.createManager)
+  .get(auth('getManagers'), validate(managerValidation.getManagers), managerController.getManagers);
 
 router
   .route('/:managerId')
-  .get(manager('getManagers'), validate(managerValidation.getManager), managerController.getManager)
-  .patch(manager('manageManagers'), validate(managerValidation.updateManager), managerController.updateManager)
-  .delete(manager('manageManagers'), validate(managerValidation.deleteManager), managerController.deleteManager);
+  .get(auth('getManagers'), validate(managerValidation.getManager), managerController.getManager)
+  .patch(auth('manageManagers'), validate(managerValidation.updateManager), managerController.updateManager)
+  .delete(auth('manageManagers'), validate(managerValidation.deleteManager), managerController.deleteManager);
 
 export default router;
 
