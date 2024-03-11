@@ -7,7 +7,7 @@ import { error } from 'console';
 import passport from 'passport';
 
 const registerAsAgency = catchAsync(async (req, res) => {
-  const role = 'AGENCY';
+  const role = "AGENCY";
   const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
   const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
@@ -17,7 +17,7 @@ const registerAsAgency = catchAsync(async (req, res) => {
 });
 
 const registerAsManager = catchAsync(async (req, res) => {
-  const role = 'MANAGER';
+  const role = "MANAGER";
   const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
   const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
@@ -28,7 +28,7 @@ const registerAsManager = catchAsync(async (req, res) => {
 
 
 const registerAsTalent = catchAsync(async (req, res) => {
-  const role= 'TALENT';
+  const role= "TALENT";
   const { email, password, fullName, mobileNumber, verificationType, stageName, industry, bookingPrice, agencyId, managerId, agencyManagerId } = req.body;
   const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
