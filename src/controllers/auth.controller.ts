@@ -2,12 +2,12 @@ import httpStatus from 'http-status';
 import catchAsync from '../utils/catchAsync';
 import { authService, userService, tokenService, emailService, agencyService, managerService, talentService } from '../services';
 import exclude from '../utils/exclude';
-import { User } from '@prisma/client';
+import { User, Role } from '@prisma/client';
 import { error } from 'console';
 import passport from 'passport';
 
 const registerAsAgency = catchAsync(async (req, res) => {
-  const role = "AGENCY";
+  const role = Role.AGENCY
   const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
   const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
@@ -17,7 +17,7 @@ const registerAsAgency = catchAsync(async (req, res) => {
 });
 
 const registerAsManager = catchAsync(async (req, res) => {
-  const role = "MANAGER";
+  const role = Role.MANAGER;
   const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
   const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
@@ -28,7 +28,7 @@ const registerAsManager = catchAsync(async (req, res) => {
 
 
 const registerAsTalent = catchAsync(async (req, res) => {
-  const role= "TALENT";
+  const role= Role.TALENT;
   const { email, password, fullName, mobileNumber, verificationType, stageName, industry, bookingPrice, agencyId, managerId, agencyManagerId } = req.body;
   const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
