@@ -3,8 +3,12 @@ import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import { roleRights } from '../config/roles';
 import { NextFunction, Request, Response } from 'express';
-import { User } from '@prisma/client';
+import { User, PrismaClient, Manager } from '@prisma/client';
 
+
+const mangr = new PrismaClient().manager;
+
+console.log(mangr);
 const verifyCallback =
   (
     req: any,
@@ -12,17 +16,19 @@ const verifyCallback =
     reject: (reason?: unknown) => void,
     requiredRights: string[]
   ) =>
-  async (err: unknown, user: User | false, info: unknown) => {
+  async (err: unknown, user: User | false, manag: Manager, info: unknown) => {
     if (err || info || !user) {
       return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
     }
     req.user = user;
+
     if (requiredRights.length) {
       const userRights = roleRights.get(user.role) ?? [];
-      const hasRequiredRights = requiredRights.every((requiredRight) =>
-      userRights.includes(requiredRight)
+      const hasRequiredRights = requiredRights.every((requiredRights) =>
+      userRights.includes(requiredRights)
       );
-      if (!hasRequiredRights && req.params.userId != user.id) {
+      console.log(manag);
+      if (!hasRequiredRights && req.params.managerId != manag.id) {
         return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
       }
     }
@@ -30,7 +36,7 @@ const verifyCallback =
     resolve();
   };
   
-  const auth =
+  const manager =
   (...requiredRights: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     return new Promise((resolve, reject) => {
@@ -44,4 +50,4 @@ const verifyCallback =
       .catch((err) => next(err));
   };
 
-export default auth;
+export default manager;

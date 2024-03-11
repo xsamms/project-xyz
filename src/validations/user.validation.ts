@@ -9,7 +9,7 @@ const createUser = {
     fullName: Joi.string(),
     mobileNumber: Joi.string(),
     verificationType: Joi.string(),
-    role: Joi.string().required().valid(Role.USER, Role.ADMIN)
+    role: Joi.string().required().valid(Role.USER, Role.ADMIN, Role.MANAGER, Role.AGENCY, Role.AGENCYMANAGER, Role.TALENT),
   })
 };
 

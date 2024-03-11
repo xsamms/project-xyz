@@ -8,31 +8,31 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(calenderValidation.createCalender), calenderController.createCalender)
-  .get(auth('getUsers'), validate(calenderValidation.getCalenders), calenderController.getCalenders);
+  .post(auth('manageCalenders'), validate(calenderValidation.createCalender), calenderController.createCalender)
+  .get(auth('getCalenders'), validate(calenderValidation.getCalenders), calenderController.getCalenders);
 
 router
   .route('/:calenderId')
-  .get(auth('getUsers'), validate(calenderValidation.getCalender), calenderController.getCalender)
-  .patch(auth('manageUsers'), validate(calenderValidation.updateCalender), calenderController.updateCalender)
-  .delete(auth('manageUsers'), validate(calenderValidation.deleteCalender), calenderController.deleteCalender);
+  .get(auth('getCalenders'), validate(calenderValidation.getCalender), calenderController.getCalender)
+  .patch(auth('manageCalenders'), validate(calenderValidation.updateCalender), calenderController.updateCalender)
+  .delete(auth('manageCalenders'), validate(calenderValidation.deleteCalender), calenderController.deleteCalender);
 
 export default router;
 
 /**
  * @swagger
  * tags:
- *   name: Calenders
- *   description: User management and retrieval
+ *   name: Calender
+ *   description: Calender management and retrieval
  */
 
 /**
  * @swagger
- * /users:
+ * /calender:
  *   post:
- *     summary: Create a user
- *     description: Create users.
- *     tags: [Users]
+ *     summary: Create a calender
+ *     description: Create calender.
+ *     tags: [Calender]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -60,19 +60,19 @@ export default router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [user, admin]
+ *                  enum: [calender, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: user
+ *               role: calender
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Calender'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -81,9 +81,9 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all users
- *     description: Retrieve all users.
- *     tags: [Users]
+ *     summary: Get all calenders
+ *     description: Retrieve all calenders.
+ *     tags: [Calender]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -91,12 +91,12 @@ export default router;
  *         name: name
  *         schema:
  *           type: string
- *         description: User name
+ *         description: Calender name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: User role
+ *         description: Calender role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -108,7 +108,7 @@ export default router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of calenders
  *       - in: query
  *         name: page
  *         schema:
@@ -127,7 +127,7 @@ export default router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/Calender'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -148,11 +148,11 @@ export default router;
 
 /**
  * @swagger
- * /users/{id}:
+ * /calender/{id}:
  *   get:
- *     summary: Get a user
- *     description: Fetch a user by id.
- *     tags: [Users]
+ *     summary: Get a calender
+ *     description: Fetch a calender by id.
+ *     tags: [Calender]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -161,14 +161,14 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Calender id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Calender'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -177,9 +177,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a user
- *     description: Logged in users can only update their own information. Only admins can update other users.
- *     tags: [Users]
+ *     summary: Update a calender
+ *     description: Logged in users can only update their own information. Only admins can update other calenders.
+ *     tags: [Calender]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,7 +188,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Calender id
  *     requestBody:
  *       required: true
  *       content:
@@ -217,7 +217,7 @@ export default router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Calender'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -228,9 +228,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a user
- *     description: Logged in users can delete only themselves. Only admins can delete other users.
- *     tags: [Users]
+ *     summary: Delete a calender
+ *     description: Logged in users can delete only themselves. Only admins can delete other calenders.
+ *     tags: [Calender]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -239,7 +239,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Calender id
  *     responses:
  *       "200":
  *         description: No content

@@ -17,12 +17,13 @@ const verifyCallback =
       return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
     }
     req.user = user;
+
     if (requiredRights.length) {
       const userRights = roleRights.get(user.role) ?? [];
-      const hasRequiredRights = requiredRights.every((requiredRight) =>
-      userRights.includes(requiredRight)
+      const hasRequiredRights = requiredRights.every((requiredRights) =>
+      userRights.includes(requiredRights)
       );
-      if (!hasRequiredRights && req.params.userId != user.id) {
+      if (!hasRequiredRights && req.params.agencyId != user.id) {
         return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
       }
     }
@@ -30,7 +31,7 @@ const verifyCallback =
     resolve();
   };
   
-  const auth =
+  const agency =
   (...requiredRights: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     return new Promise((resolve, reject) => {
@@ -44,4 +45,4 @@ const verifyCallback =
       .catch((err) => next(err));
   };
 
-export default auth;
+export default agency;

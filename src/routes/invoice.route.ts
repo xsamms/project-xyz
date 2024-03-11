@@ -22,17 +22,17 @@ export default router;
 /**
  * @swagger
  * tags:
- *   name: Invoices
+ *   name: Invoice
  *   description: Invoice management and retrieval
  */
 
 /**
  * @swagger
- * /invoices:
+ * /invoice:
  *   post:
- *     summary: Create a invoice
- *     description: Create invoices.
- *     tags: [Invoices]
+ *     summary: Create an invoice
+ *     description: Create invoice.
+ *     tags: [Invoice]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -83,7 +83,7 @@ export default router;
  *   get:
  *     summary: Get all invoices
  *     description: Retrieve all invoices.
- *     tags: [Invoices]
+ *     tags: [Invoice]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -148,11 +148,11 @@ export default router;
 
 /**
  * @swagger
- * /invoices/{id}:
+ * /invoice/{id}:
  *   get:
- *     summary: Get a invoice
- *     description: Fetch a invoice by id.
- *     tags: [Invoices]
+ *     summary: Get an invoice
+ *     description: Fetch an invoice by id.
+ *     tags: [Invoice]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -177,9 +177,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a invoice
- *     description: Logged in invoices can only update their own information. Only admins can update other invoices.
- *     tags: [Invoices]
+ *     summary: Update an invoice
+ *     description: Logged in users can only update their own information. Only admins can update other invoices.
+ *     tags: [Invoice]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -228,9 +228,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a invoice
- *     description: Logged in invoices can delete only themselves. Only admins can delete other invoices.
- *     tags: [Invoices]
+ *     summary: Delete an invoice
+ *     description: Logged in users can delete only themselves. Only admins can delete other invoices.
+ *     tags: [Invoice]
  *     security:
  *       - bearerAuth: []
  *     parameters:

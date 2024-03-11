@@ -8,14 +8,14 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(talentValidation.createTalent), talentController.createTalent)
-  .get(auth('getUsers'), validate(talentValidation.getTalents), talentController.getTalents);
+  .post(auth('manageTalents'), validate(talentValidation.createTalent), talentController.createTalent)
+  .get(auth('getTalents'), validate(talentValidation.getTalents), talentController.getTalents);
 
 router
   .route('/:talentId')
-  .get(auth('getUsers'), validate(talentValidation.getTalent), talentController.getTalent)
-  .patch(auth('manageUsers'), validate(talentValidation.updateTalent), talentController.updateTalent)
-  .delete(auth('manageUsers'), validate(talentValidation.deleteTalent), talentController.deleteTalent);
+  .get(auth('getTalents'), validate(talentValidation.getTalent), talentController.getTalent)
+  .patch(auth('manageTalents'), validate(talentValidation.updateTalent), talentController.updateTalent)
+  .delete(auth('manageTalents'), validate(talentValidation.deleteTalent), talentController.deleteTalent);
 
 export default router;
 
@@ -23,16 +23,16 @@ export default router;
  * @swagger
  * tags:
  *   name: Talents
- *   description: User management and retrieval
+ *   description: Talent management and retrieval
  */
 
 /**
  * @swagger
- * /users:
+ * /talents:
  *   post:
- *     summary: Create a user
- *     description: Create users.
- *     tags: [Users]
+ *     summary: Create a talent
+ *     description: Create talents.
+ *     tags: [Talents]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -60,19 +60,19 @@ export default router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [user, admin]
+ *                  enum: [talent, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: user
+ *               role: talent
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Talent'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -81,9 +81,9 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all users
- *     description: Retrieve all users.
- *     tags: [Users]
+ *     summary: Get all talents
+ *     description: Retrieve all talents.
+ *     tags: [Talents]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -91,12 +91,12 @@ export default router;
  *         name: name
  *         schema:
  *           type: string
- *         description: User name
+ *         description: Talent name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: User role
+ *         description: Talent role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -108,7 +108,7 @@ export default router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of talents
  *       - in: query
  *         name: page
  *         schema:
@@ -127,7 +127,7 @@ export default router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/Talent'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -148,11 +148,11 @@ export default router;
 
 /**
  * @swagger
- * /users/{id}:
+ * /talents/{id}:
  *   get:
- *     summary: Get a user
- *     description: Fetch a user by id.
- *     tags: [Users]
+ *     summary: Get a talent
+ *     description: Fetch a talent by id.
+ *     tags: [Talents]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -161,14 +161,14 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Talent id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Talent'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -177,9 +177,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a user
- *     description: Logged in users can only update their own information. Only admins can update other users.
- *     tags: [Users]
+ *     summary: Update a talent
+ *     description: Logged in talents can only update their own information. Only admins can update other talents.
+ *     tags: [Talents]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,7 +188,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Talent id
  *     requestBody:
  *       required: true
  *       content:
@@ -217,7 +217,7 @@ export default router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Talent'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -228,9 +228,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a user
- *     description: Logged in users can delete only themselves. Only admins can delete other users.
- *     tags: [Users]
+ *     summary: Delete a talent
+ *     description: Logged in talents can delete only themselves. Only admins can delete other talents.
+ *     tags: [Talents]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -239,7 +239,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Talent id
  *     responses:
  *       "200":
  *         description: No content

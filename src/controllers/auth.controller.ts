@@ -7,8 +7,9 @@ import { error } from 'console';
 import passport from 'passport';
 
 const registerAsAgency = catchAsync(async (req, res) => {
+  const role = 'AGENCY';
   const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
-  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType);
+  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
   const agency = await agencyService.createAgency(user.id, agencyName, regNumber, industry, address, state, country)
@@ -16,8 +17,9 @@ const registerAsAgency = catchAsync(async (req, res) => {
 });
 
 const registerAsManager = catchAsync(async (req, res) => {
+  const role = 'MANAGER';
   const { email, password, fullName, mobileNumber, verificationType, agencyName, regNumber, industry, address, state, country } = req.body;
-  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType);
+  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
   const manager = await managerService.createManager(user.id, agencyName, regNumber, industry, address, state, country)
@@ -26,8 +28,9 @@ const registerAsManager = catchAsync(async (req, res) => {
 
 
 const registerAsTalent = catchAsync(async (req, res) => {
+  const role= 'TALENT';
   const { email, password, fullName, mobileNumber, verificationType, stageName, industry, bookingPrice, agencyId, managerId, agencyManagerId } = req.body;
-  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType);
+  const user = await userService.createUser(email, password, fullName, mobileNumber, verificationType, role);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
   const talent = await talentService.createTalent(user.id, agencyId, managerId, agencyManagerId, stageName, industry, bookingPrice)

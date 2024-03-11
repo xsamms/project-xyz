@@ -21,6 +21,8 @@ model Agency {
   address       String
   state         String
   country       String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   user          User            @relation(fields: [userId], references: [id])
   talent        Talent[]
   agencyManager AgencyManager[]
@@ -30,16 +32,18 @@ model Agency {
 }
 
 model AgencyManager {
-  id       Int       @id @default(autoincrement())
-  userId   Int       @unique
-  agencyId Int       @unique
-  gender   String
-  user     User      @relation(fields: [userId], references: [id])
-  agency   Agency    @relation(fields: [agencyId], references: [id])
-  talent   Talent[]
-  calender Calender?
-  inquiry  Inquiry[]
-  Team     Team[]
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  agencyId  Int       @unique
+  gender    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id])
+  agency    Agency    @relation(fields: [agencyId], references: [id])
+  talent    Talent[]
+  calender  Calender?
+  inquiry   Inquiry[]
+  Team      Team[]
 }
 
 model Calender {
@@ -55,6 +59,8 @@ model Calender {
   eventCountry    String
   eventDate       DateTime       @db.Date
   eventTime       DateTime       @db.Time
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   talent          Talent?        @relation(fields: [talentId], references: [id])
   manager         Manager?       @relation(fields: [managerId], references: [id])
   agency          Agency?        @relation(fields: [agencyId], references: [id])
@@ -81,6 +87,8 @@ model Inquiry {
   eventCountry    String
   eventDate       DateTime
   eventTime       DateTime
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   talent          Talent?        @relation(fields: [talentId], references: [id])
   manager         Manager?       @relation(fields: [managerId], references: [id])
   agency          Agency?        @relation(fields: [agencyId], references: [id])
@@ -102,6 +110,8 @@ model Invoice {
   logisticFee  Int
   TnC          String
   totalFee     Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   talent       Talent?  @relation(fields: [talentId], references: [id])
   manager      Manager? @relation(fields: [managerId], references: [id])
   agency       Agency?  @relation(fields: [agencyId], references: [id])
@@ -115,6 +125,8 @@ model Manager {
   address    String
   state      String
   country    String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
   user       User      @relation(fields: [userId], references: [id])
   userId     Int       @unique
   talent     Talent[]
@@ -124,12 +136,14 @@ model Manager {
 }
 
 model Message {
-  id      Int    @id @default(autoincrement())
-  email   String @unique
-  subject String
-  message String
-  usersId Int
-  user    User   @relation(fields: [usersId], references: [id])
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  usersId   Int
+  user      User     @relation(fields: [usersId], references: [id])
 }
 
 model Talent {
@@ -141,6 +155,8 @@ model Talent {
   stageName       String         @unique
   industry        String
   bookingPrice    Int?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   user            User           @relation(fields: [userId], references: [id])
   agency          Agency?        @relation(fields: [agencyId], references: [id])
   manager         Manager?       @relation(fields: [managerId], references: [id])
@@ -155,6 +171,8 @@ model Team {
   id             Int             @id @default(autoincrement())
   title          String
   status         Boolean
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   agency         Agency[]
   talents        Talent[]
   agencyManagers AgencyManager[]
@@ -197,6 +215,10 @@ enum InquiryType {
 }
 
 enum Role {
+  AGENCY
+  MANAGER
+  AGENCYMANAGER
+  TALENT
   USER
   ADMIN
 }

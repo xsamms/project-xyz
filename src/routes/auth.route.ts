@@ -42,104 +42,9 @@ export default router;
 
 /**
  * @swagger
- * /auth/register-with-email:
+ * /auth/register-as-agency:
  *   post:
- *     summary: Register as user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - email
- *               - password
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
- *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
- *     responses:
- *       "201":
- *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *                 tokens:
- *                   $ref: '#/components/schemas/AuthTokens'
- *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
- */
-
-/**
- * @swagger
-* /auth/register-with-phone:
- *   post:
- *     summary: Register as user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - telephone
- *               - password
- *             properties:
- *               name:
- *                 type: string
- *               telephone:
- *                 type: string
- *                 description: must be unique
- *               password:
- *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *             example:
- *               name: fake name
- *               telephone: "+2348077665544"
- *               password: password1
- *     responses:
- *       "201":
- *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *                 tokens:
- *                   $ref: '#/components/schemas/AuthTokens'
- *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
- */
-
-/**
- * @swagger
-* /auth/firebase:
- *   post:
- *     summary: Register/Login as user with Firebase Auth
+ *     summary: Register as an agency
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -149,21 +54,49 @@ export default router;
  *             type: object
  *             required:
  *               - email
- *               - telephone
- *               - name
+ *               - password
  *             properties:
  *               email:
  *                 type: string
  *                 format: email
  *                 description: must be unique
- *               telephone:
+ *               password:
  *                 type: string
- *               name:
+ *                 format: password
+ *                 minLength: 8
+ *                 description: At least one number and one letter
+ *               fullName:
+ *                 type: string
+ *               mobileNumber:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *               verificationType:
+ *                 type: string
+ *               agencyName:
+ *                 type: string
+ *               regNumber:
+ *                 type: string
+ *               industry:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               state:
+ *                 type: string
+ *               country:
  *                 type: string
  *             example:
  *               email: fake@example.com
- *               telephone: "+2348077665544"
- *               name: fake name
+ *               password: password1
+ *               fullName: fake name
+ *               mobileNumber: "08099999999"
+ *               verificationType: "BVN"
+ *               agencyName: "Platazion Inc."
+ *               regNumber: "BN20381900"
+ *               industry: "Entertainment"
+ *               address: "12, Isaac John Str, GRA, Ikeja"
+ *               state: "Lagos"
+ *               country: "Nigeria"
  *     responses:
  *       "201":
  *         description: Created
@@ -176,14 +109,162 @@ export default router;
  *                   $ref: '#/components/schemas/User'
  *                 tokens:
  *                   $ref: '#/components/schemas/AuthTokens'
+ *                 agency:
+ *                   $ref: '#/components/schemas/Agency'
  *       "400":
- *         $ref: '#/components/responses/DuplicateUser'
+ *         $ref: '#/components/responses/DuplicateEmail'
+ */
+
+/**
+ * @swagger
+* /auth/register-as-manager:
+ *   post:
+ *     summary: Register as a manager
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: must be unique
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 8
+ *                 description: At least one number and one letter
+ *               fullName:
+ *                 type: string
+ *               mobileNumber:
+ *                 type: string
+ *               verificationType:
+ *                 type: string
+ *               agencyName:
+ *                 type: string
+ *               regNumber:
+ *                 type: string
+ *               industry:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               state:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *             example:
+ *               email: fake@example.com
+ *               password: password1
+ *               fullName: fake name
+ *               mobileNumber: "08099999999"
+ *               verificationType: "BVN"
+ *               agencyName: "Platazion Inc."
+ *               regNumber: "BN20381900"
+ *               industry: "Entertainment"
+ *               address: "12, Isaac John Str, GRA, Ikeja"
+ *               state: "Lagos"
+ *               country: "Nigeria"
+ *     responses:
+ *       "201":
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 tokens:
+ *                   $ref: '#/components/schemas/AuthTokens'
+ *                 manager:
+ *                   $ref: '#/components/schemas/Manager'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
+ */
+
+/**
+ * @swagger
+* /auth/register-as-talent:
+ *   post:
+ *     summary: Register as a talent
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: must be unique
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 8
+ *                 description: At least one number and one letter
+ *               fullName:
+ *                 type: string
+ *               mobileNumber:
+ *                 type: string
+ *               verificationType:
+ *                 type: string
+ *               agencyId:
+ *                 type: number
+ *               managerId:
+ *                 type: number
+ *               agencyManagerId:
+ *                 type: number
+ *               stageName:
+ *                 type: string
+ *               industry:
+ *                 type: string
+ *               bookingPrice:
+ *                 type: number
+ *             example:
+ *               email: fake@example.com
+ *               password: password1
+ *               fullName: fake name
+ *               mobileNumber: "08099999999"
+ *               verificationType: "BVN"
+ *               agencyId: 1
+ *               managerId: 2
+ *               agencyManagerId: 3
+ *               stageNamw: Gbaskolobo
+ *               industry: "Entertainment"
+ *               bookingPrice: 100000
+ *     responses:
+ *       "201":
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 tokens:
+ *                   $ref: '#/components/schemas/AuthTokens'
+ *                 talent:
+ *                   $ref: '#/components/schemas/Talent'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
  */
 
 
 /**
  * @swagger
- * /auth/login-with-email:
+ * /auth/login:
  *   post:
  *     summary: Login
  *     tags: [Auth]
@@ -205,54 +286,6 @@ export default router;
  *                 format: password
  *             example:
  *               email: fake@example.com
- *               password: password1
- *     responses:
- *       "200":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *                 tokens:
- *                   $ref: '#/components/schemas/AuthTokens'
- *       "401":
- *         description: Invalid email or password
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *             example:
- *               code: 401
- *               message: Invalid email or password
- */
-
-
-/**
- * @swagger
- * /auth/login-with-phone:
- *   post:
- *     summary: Login
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - telephone
- *               - password
- *             properties:
- *               telephone:
- *                 type: string
- *               password:
- *                 type: string
- *                 format: password
- *             example:
- *               telephone: "+2348077665544"
  *               password: password1
  *     responses:
  *       "200":

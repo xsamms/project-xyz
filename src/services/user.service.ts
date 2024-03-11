@@ -15,7 +15,7 @@ const createUser = async (
   fullName: string,
   mobileNumber: string,
   verificationType: string,
-  role: Role = Role.USER
+  role: Role
 ): Promise<User> => {
   if (await getUserByEmail(email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');

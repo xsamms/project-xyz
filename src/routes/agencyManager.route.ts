@@ -8,31 +8,31 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(agencyManagerValidation.createAgencyManager), agencyController.createAgency)
-  .get(auth('getUsers'), validate(agencyManagerValidation.getAgencyManagers), agencyController.getAgencies);
+  .post(auth('manageAgencyManagers'), validate(agencyManagerValidation.createAgencyManager), agencyController.createAgency)
+  .get(auth('getAgencyManagers'), validate(agencyManagerValidation.getAgencyManagers), agencyController.getAgencies);
 
 router
   .route('/:agencyId')
-  .get(auth('getUsers'), validate(agencyManagerValidation.getAgencyManager), agencyController.getAgency)
-  .patch(auth('manageUsers'), validate(agencyManagerValidation.updateAgencyManager), agencyController.updateAgency)
-  .delete(auth('manageUsers'), validate(agencyManagerValidation.deleteAgencyManager), agencyController.deleteAgency);
+  .get(auth('getAgencyManagers'), validate(agencyManagerValidation.getAgencyManager), agencyController.getAgency)
+  .patch(auth('manageAgencyManagers'), validate(agencyManagerValidation.updateAgencyManager), agencyController.updateAgency)
+  .delete(auth('manageAgencyManagers'), validate(agencyManagerValidation.deleteAgencyManager), agencyController.deleteAgency);
 
 export default router;
 
 /**
  * @swagger
  * tags:
- *   name: Agency
- *   description: Agency management and retrieval
+ *   name: Agency Manager
+ *   description: Agency Manager management and retrieval
  */
 
 /**
  * @swagger
- * /agency:
+ * /agencymanager:
  *   post:
- *     summary: Create agency
+ *     summary: Create agency Manager
  *     description: Create agencies.
- *     tags: [Agency]
+ *     tags: [Agency Manager]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -60,19 +60,19 @@ export default router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [user, admin]
+ *                  enum: [agencymanager, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: user
+ *               role: agencymanager
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/AgencyManager'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -81,9 +81,9 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all users
- *     description: Retrieve all users.
- *     tags: [Users]
+ *     summary: Get all Agency Managers
+ *     description: Retrieve all Agency Managers.
+ *     tags: [Agency Manager]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -91,12 +91,12 @@ export default router;
  *         name: name
  *         schema:
  *           type: string
- *         description: User name
+ *         description: AgencyManager name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: User role
+ *         description: AgencyManager role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -108,7 +108,7 @@ export default router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of agencymanagers
  *       - in: query
  *         name: page
  *         schema:
@@ -127,7 +127,7 @@ export default router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/AgencyManager'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -148,11 +148,11 @@ export default router;
 
 /**
  * @swagger
- * /users/{id}:
+ * /agencymanager/{id}:
  *   get:
- *     summary: Get a user
- *     description: Fetch a user by id.
- *     tags: [Users]
+ *     summary: Get an Agency Manager
+ *     description: Fetch an agency manager by id.
+ *     tags: [Agency Manager]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -161,14 +161,14 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: AgencyManager id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/AgencyManager'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -177,9 +177,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a user
- *     description: Logged in users can only update their own information. Only admins can update other users.
- *     tags: [Users]
+ *     summary: Update an Agency Manager
+ *     description: Logged in agency manager can only update their own information. Only admins can update other agencymanagers.
+ *     tags: [Agency Manager]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,7 +188,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: AgencyManager id
  *     requestBody:
  *       required: true
  *       content:
@@ -217,7 +217,7 @@ export default router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/AgencyManager'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -228,9 +228,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a user
- *     description: Logged in users can delete only themselves. Only admins can delete other users.
- *     tags: [Users]
+ *     summary: Delete an agency manager
+ *     description: Logged in agency managers can delete only themselves. Only admins can delete other agencymanagers.
+ *     tags: [Agency Manager]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -239,7 +239,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: AgencyManager id
  *     responses:
  *       "200":
  *         description: No content

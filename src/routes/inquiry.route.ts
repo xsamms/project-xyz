@@ -22,17 +22,17 @@ export default router;
 /**
  * @swagger
  * tags:
- *   name: Inquiries
+ *   name: Inquiry
  *   description: Inquiry management and retrieval
  */
 
 /**
  * @swagger
- * /inquirys:
+ * /inquiry:
  *   post:
- *     summary: Create a inquiry
- *     description: Create inquirys.
- *     tags: [Inquiries]
+ *     summary: Create inquiry
+ *     description: Create inquiry.
+ *     tags: [Inquiry]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -81,9 +81,9 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all inquirys
- *     description: Retrieve all inquirys.
- *     tags: [Inquiries]
+ *     summary: Get all inquiries
+ *     description: Retrieve all inquiries.
+ *     tags: [Inquiry]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -148,11 +148,11 @@ export default router;
 
 /**
  * @swagger
- * /inquirys/{id}:
+ * /inquiry/{id}:
  *   get:
- *     summary: Get a inquiry
- *     description: Fetch a inquiry by id.
- *     tags: [Inquiries]
+ *     summary: Get an inquiry
+ *     description: Fetch an inquiry by id.
+ *     tags: [Inquiry]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -177,9 +177,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a inquiry
- *     description: Logged in inquirys can only update their own information. Only admins can update other inquirys.
- *     tags: [Inquiries]
+ *     summary: Update an inquiry
+ *     description: Logged in users can only update their own information. Only admins can update other inquirys.
+ *     tags: [Inquiry]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -228,9 +228,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a inquiry
- *     description: Logged in inquirys can delete only themselves. Only admins can delete other inquirys.
- *     tags: [Inquiries]
+ *     summary: Delete an inquiry
+ *     description: Logged in users can delete only themselves. Only admins can delete other inquirys.
+ *     tags: [Inquiry]
  *     security:
  *       - bearerAuth: []
  *     parameters:

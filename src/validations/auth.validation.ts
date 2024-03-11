@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { Role } from '@prisma/client';
 import { password } from './custom.validation';
 import { empty } from '@prisma/client/runtime/library';
 
@@ -41,6 +42,7 @@ const registerAsTalent = {
   body: Joi.object().keys({
     userId: Joi.number(),
     agencyId: Joi.number(),
+    agencyManagerId: Joi.number(),
     managerId: Joi.number(),
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),

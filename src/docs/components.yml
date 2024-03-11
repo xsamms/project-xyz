@@ -1,61 +1,110 @@
 components:
   schemas:
-    Goal:
+    Agency:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: number
+        agencyName:
+          type: string
+        regNumber:
+          type: string
+        industry:
+          type: string
+        address:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+      example:
+        id: 1
+        userId: 2
+        agencyName: "Platazion Inc."
+        regNumber: "BN20381900"
+        industry: "Entertainment"
+        address: "12, Isaac John Str, GRA, Ikeja"
+        state: "Lagos"
+        country: "Nigeria"
+    Manager:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: number
+        agencyName:
+          type: string
+        regNumber:
+          type: string
+        industry:
+          type: string
+        address:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+      example:
+        id: 1
+        userId: 2
+        agencyName: "Platazion Inc."
+        regNumber: "BN20381900"
+        industry: "Entertainment"
+        address: "12, Isaac John Str, GRA, Ikeja"
+        state: "Lagos"
+        country: "Nigeria"
+    Talent:
       type: object
       properties:
         id:
           type: integer
-        name:
-          type: string
-          description: must be unique
-        description:
-          type: string
-        category:
-          type: string
-        progress:
+        AgencyId:
           type: integer
-        start_date:
-          type: date
-        finish_date:
-          type: date
-        task:
-          type: string of array
-        userId:
+        ManagerId:
+          type: integer
+        AgencyManagerId:
+          type: integer
+        stageName:
+          type: string
+        industry:
+          type: string
+        bookingPrice:
           type: integer
       example:
-        name: AWS Certification
-        description: Get certified in AWS Developer Associate by June 2024
-        category: Career Goals
-        progress: 10
-        start_date: 01/01/2024
-        finish_date: 05/30/2024
-        task:
-          [
-            "Enroll in AWS developer course with Udemy",
-            "Study and finish the course",
-            "Take the exam",
-          ]
+        id: 1
         userId: 2
+        agencyId: 2
+        managerId: 2
+        agencyManagerId: 2
+        stageName: "Platazion Boyz"
+        industry: "Entertainment"
+        bookingPrice: 10000
     User:
       type: object
       properties:
         id:
-          type: string
+          type: number
         email:
           type: string
           format: email
-        telephone:
+        fullName:
           type: string
-        name:
+        mobileNumber:
+          type: string
+        verificationType:
           type: string
         role:
           type: string
-          enum: [USER, ADMIN]
+          enum: [USER, ADMIN, AGENCY, MANAGER, AGENCYMANAGER, TALENT]
       example:
-        id: 5ebac534954b54139806c112
+        id: 1
         email: fake@example.com
-        telephone: "+2348077665544"
-        name: fake name
+        fullName: fake name
+        mobileNumber: "08099999999"
+        verificationType: "BVN"
         role: USER
 
     Token:

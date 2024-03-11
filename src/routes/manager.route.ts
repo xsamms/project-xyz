@@ -1,5 +1,5 @@
 import express from 'express';
-import auth from '../middlewares/auth';
+import manager from '../middlewares/manager';
 import validate from '../middlewares/validate';
 import { managerValidation } from '../validations';
 import { managerController } from '../controllers';
@@ -8,14 +8,14 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(managerValidation.createManager), managerController.createManager)
-  .get(auth('getUsers'), validate(managerValidation.getManagers), managerController.getManagers);
+  .post(manager('manageManagers'), validate(managerValidation.createManager), managerController.createManager)
+  .get(manager('getManagers'), validate(managerValidation.getManagers), managerController.getManagers);
 
 router
   .route('/:managerId')
-  .get(auth('getUsers'), validate(managerValidation.getManager), managerController.getManager)
-  .patch(auth('manageUsers'), validate(managerValidation.updateManager), managerController.updateManager)
-  .delete(auth('manageUsers'), validate(managerValidation.deleteManager), managerController.deleteManager);
+  .get(manager('getManagers'), validate(managerValidation.getManager), managerController.getManager)
+  .patch(manager('manageManagers'), validate(managerValidation.updateManager), managerController.updateManager)
+  .delete(manager('manageManagers'), validate(managerValidation.deleteManager), managerController.deleteManager);
 
 export default router;
 
@@ -28,10 +28,10 @@ export default router;
 
 /**
  * @swagger
- * /Manager:
+ * /manager:
  *   post:
  *     summary: Create Manager
- *     description: Create Managers.
+ *     description: Create a Manager.
  *     tags: [Manager]
  *     security:
  *       - bearerAuth: []
@@ -42,37 +42,37 @@ export default router;
  *           schema:
  *             type: object
  *             required:
- *               - name
- *               - email
- *               - password
- *               - role
+ *               - userId
  *             properties:
- *               name:
+ *               userId:
+ *                 type: number
+ *               agencyName:
  *                 type: string
- *               email:
+ *               regNumber:
+ *                 type: number
+ *               industry:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
- *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *               role:
+ *               address:
  *                  type: string
- *                  enum: [user, admin]
+ *               state:
+ *                  type: string
+ *               country:
+ *                  type: string
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
- *               role: user
+ *               userId: 2
+ *               agencyName: Pub Music
+ *               regNumber: BN837912
+ *               industry: Music
+ *               address: 12, Isaac John Str, GRA, Ikeja
+ *               state: Lagos
+ *               country: Nigeria
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Manager'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -81,22 +81,22 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all users
- *     description: Retrieve all users.
- *     tags: [Users]
+ *     summary: Get all managers
+ *     description: Retrieve all managers.
+ *     tags: [Manager]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: name
+ *         name: agencyName
  *         schema:
  *           type: string
- *         description: User name
+ *         description: Manager name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: User role
+ *         description: Manager role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -108,7 +108,7 @@ export default router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of managers
  *       - in: query
  *         name: page
  *         schema:
@@ -127,7 +127,7 @@ export default router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/Manager'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -148,11 +148,11 @@ export default router;
 
 /**
  * @swagger
- * /users/{id}:
+ * /manager/{id}:
  *   get:
- *     summary: Get a user
- *     description: Fetch a user by id.
- *     tags: [Users]
+ *     summary: Get a manager
+ *     description: Fetch a manager by id.
+ *     tags: [Manager]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -161,14 +161,14 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Manager id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Manager'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -177,9 +177,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a user
- *     description: Logged in users can only update their own information. Only admins can update other users.
- *     tags: [Users]
+ *     summary: Update a manager
+ *     description: Logged in managers can only update their own information. Only admins can update other managers.
+ *     tags: [Manager]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,7 +188,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Manager id
  *     requestBody:
  *       required: true
  *       content:
@@ -196,28 +196,36 @@ export default router;
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               userId:
+ *                 type: number
+ *               agencyName:
  *                 type: string
- *               email:
+ *               regNumber:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
+ *               industry:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
+ *               address:
+ *                 type: string
+ *               state:
+ *                 type: string
+ *               country:
+ *                 type: string
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
+ *               id: 1
+ *               userId: 2
+ *               agencyName: "Platazion Inc."
+ *               regNumber: "BN20381900"
+ *               industry: "Entertainment"
+ *               address: "12, Isaac John Str, GRA, Ikeja"
+ *               state: "Lagos"
+ *               country: "Nigeria"
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Manager'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -228,9 +236,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a user
- *     description: Logged in users can delete only themselves. Only admins can delete other users.
- *     tags: [Users]
+ *     summary: Delete a manager
+ *     description: Logged in managers can delete only themselves. Only admins can delete other managers.
+ *     tags: [Manager]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -239,7 +247,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Manager id
  *     responses:
  *       "200":
  *         description: No content
