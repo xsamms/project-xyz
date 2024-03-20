@@ -3,12 +3,11 @@ import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import { roleRights } from '../config/roles';
 import { NextFunction, Request, Response } from 'express';
-import { User, PrismaClient, Manager } from '@prisma/client';
+import { User, PrismaClient } from '@prisma/client';
+
+const managa = new PrismaClient().manager;
 
 
-const mangr = new PrismaClient().manager;
-
-console.log(mangr);
 const verifyCallback =
   (
     req: any,
@@ -16,21 +15,23 @@ const verifyCallback =
     reject: (reason?: unknown) => void,
     requiredRights: string[]
   ) =>
-  async (err: unknown, user: User | false, manag: Manager, info: unknown) => {
+  async (err: unknown, user: User | false, info: unknown) => {
     if (err || info || !user) {
       return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
     }
     req.user = user;
+
+    const manage = await managa.findFirst({
+      where: {
+        userId: user.id
+      }
+    })
 
     if (requiredRights.length) {
       const userRights = roleRights.get(user.role) ?? [];
       const hasRequiredRights = requiredRights.every((requiredRights) =>
       userRights.includes(requiredRights)
       );
-      console.log(manag);
-      if (!hasRequiredRights && req.params.managerId != manag.id) {
-        return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
-      }
     }
     
     resolve();

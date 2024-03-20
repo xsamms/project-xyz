@@ -100,7 +100,12 @@ const getUserById = async <Key extends keyof User>(
 ): Promise<Pick<User, Key> | null> => {
   return prisma.user.findUnique({
     where: { id },
-    select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
+    include: {
+      manager: true,
+      agency: true,
+      agencyManager: true,
+      talent: true
+    }
   }) as Promise<Pick<User, Key> | null>;
 };
 

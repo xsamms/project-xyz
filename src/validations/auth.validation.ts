@@ -8,15 +8,15 @@ const registerAsAgency = {
     userId: Joi.number(),
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
-    fullName: Joi.string(),
-    mobileNumber: Joi.string(),
-    verificationType: Joi.string(),
-    agencyName: Joi.string(),
-    regNumber: Joi.string(),
-    industry: Joi.string(),
-    address: Joi.string(),
-    state: Joi.string(),
-    country: Joi.string()
+    fullName: Joi.string().allow('').optional(),
+    mobileNumber: Joi.string().allow('').optional(),
+    verificationType: Joi.string().allow('').optional(),
+    agencyName: Joi.string().allow('').optional(),
+    regNumber: Joi.string().allow('').optional(),
+    industry: Joi.string().allow('').optional(),
+    address: Joi.string().allow('').optional(),
+    state: Joi.string().allow('').optional(),
+    country: Joi.string().allow('').optional()
   })
 };
 
@@ -26,32 +26,32 @@ const registerAsManager = {
     userId: Joi.number(),
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
-    fullName: Joi.string(),
-    mobileNumber: Joi.string(),
-    verificationType: Joi.string(),
-    agencyName: Joi.string(),
-    regNumber: Joi.string(),
-    industry: Joi.string(),
-    address: Joi.string(),
-    state: Joi.string(),
-    country: Joi.string()
+    fullName: Joi.string().allow('').optional(),
+    mobileNumber: Joi.string().allow('').optional(),
+    verificationType: Joi.string().allow('').optional(),
+    agencyName: Joi.string().allow('').optional(),
+    regNumber: Joi.string().allow('').optional(),
+    industry: Joi.string().allow('').optional(),
+    address: Joi.string().allow('').optional(),
+    state: Joi.string().allow('').optional(),
+    country: Joi.string().allow('').optional()
   })
 };
 
 const registerAsTalent = {
   body: Joi.object().keys({
     userId: Joi.number(),
-    agencyId: Joi.number(),
-    agencyManagerId: Joi.number(),
-    managerId: Joi.number(),
+    agencyId: Joi.number().allow('').optional(),
+    agencyManagerId: Joi.number().allow('').optional(),
+    managerId: Joi.number().allow('').optional(),
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
-    fullName: Joi.string(),
-    mobileNumber: Joi.string(),
-    verificationType: Joi.string(),
-    stageName: Joi.string(),
-    bookingPrice: Joi.number(),
-    industry: Joi.string()
+    fullName: Joi.string().allow('').optional(),
+    mobileNumber: Joi.string().allow('').optional(),
+    verificationType: Joi.string().allow('').optional(),
+    stageName: Joi.string().allow('').optional(),
+    bookingPrice: Joi.number().allow('').optional(),
+    industry: Joi.string().allow('').optional()
   })
 };
 

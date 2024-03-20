@@ -5,13 +5,13 @@ import { password } from './custom.validation';
 const createManager = {
   body: Joi.object().keys({
     userId: Joi.number(),
-    agencyId: Joi.number(),
+    agencyId: Joi.number().allow('').optional(),
     agencyName: Joi.string().required(),
-    regNumber: Joi.string(),
-    industry: Joi.string(),
-    address: Joi.string(),
-    state: Joi.string(),
-    country: Joi.string()
+    regNumber: Joi.string().allow('').optional(),
+    industry: Joi.string().allow('').optional(),
+    address: Joi.string().allow('').optional(),
+    state: Joi.string().allow('').optional(),
+    country: Joi.string().allow('').optional()
   })
 };
 
