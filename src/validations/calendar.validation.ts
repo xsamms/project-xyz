@@ -26,13 +26,13 @@ const getCalendars = {
 
 const getCalendar = {
   params: Joi.object().keys({
-    calenderId: Joi.number().integer()
+    calendarId: Joi.number().integer()
   })
 };
 
 const updateCalendar = {
   params: Joi.object().keys({
-    calenderId: Joi.number().integer()
+    calendarId: Joi.number().integer()
   }),
   body: Joi.object()
     .keys({
@@ -49,7 +49,7 @@ const updateCalendar = {
 
 const deleteCalendar = {
   params: Joi.object().keys({
-    calenderId: Joi.number().integer()
+    calendarId: Joi.number().integer()
   })
 };
 

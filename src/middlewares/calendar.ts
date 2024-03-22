@@ -31,7 +31,7 @@ const verifyCallback =
       const hasRequiredRights = requiredRights.every((requiredRights) =>
       userRights.includes(requiredRights)
       );
-      console.log(hasRequiredRights, req.params.calendarId, calend?.id)
+      
       if (!hasRequiredRights && req.params.calendarId != calend?.id) {
         return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
       }
@@ -40,7 +40,7 @@ const verifyCallback =
     resolve();
   };
   
-  const agency =
+  const calendar =
   (...requiredRights: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     return new Promise((resolve, reject) => {
@@ -54,4 +54,4 @@ const verifyCallback =
       .catch((err) => next(err));
   };
 
-export default agency;
+export default calendar;

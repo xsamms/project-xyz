@@ -1,5 +1,5 @@
 import express from 'express';
-import auth from '../middlewares/auth';
+import invoice from '../middlewares/invoice';
 import validate from '../middlewares/validate';
 import { invoiceValidation } from '../validations';
 import { invoiceController } from '../controllers';
@@ -8,14 +8,14 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(invoiceValidation.createInvoice), invoiceController.createInvoice)
-  .get(auth('getUsers'), validate(invoiceValidation.getInvoices), invoiceController.getInvoices);
+  .post(invoice(), validate(invoiceValidation.createInvoice), invoiceController.createInvoice)
+  .get(invoice('getUsers'), validate(invoiceValidation.getInvoices), invoiceController.getInvoices);
 
 router
   .route('/:invoiceId')
-  .get(auth('getUsers'), validate(invoiceValidation.getInvoice), invoiceController.getInvoice)
-  .patch(auth('manageUsers'), validate(invoiceValidation.updateInvoice), invoiceController.updateInvoice)
-  .delete(auth('manageUsers'), validate(invoiceValidation.deleteInvoice), invoiceController.deleteInvoice);
+  .get(invoice('getUsers'), validate(invoiceValidation.getInvoice), invoiceController.getInvoice)
+  .patch(invoice('manageUsers'), validate(invoiceValidation.updateInvoice), invoiceController.updateInvoice)
+  .delete(invoice('manageUsers'), validate(invoiceValidation.deleteInvoice), invoiceController.deleteInvoice);
 
 export default router;
 
@@ -42,30 +42,54 @@ export default router;
  *           schema:
  *             type: object
  *             required:
- *               - name
- *               - email
- *               - password
- *               - role
+ *               - userId
  *             properties:
- *               name:
+ *               userId:
  *                 type: string
- *               email:
+ *               talentId:
+ *                 type: string
+ *               managerId:
+ *                 type: string
+ *               agencyId:
+ *                 type: string
+ *               clientName:
+ *                 type: string
+ *               clientEmail:
  *                 type: string
  *                 format: email
  *                 description: must be unique
- *               password:
+ *               eventType:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *               role:
- *                  type: string
- *                  enum: [invoice, admin]
+ *               eventDate:
+ *                  type: datetime
+ *               billOption:
+ *                 type: string
+ *               fee:
+ *                 type: number
+ *               logisticInfo:
+ *                 type: string
+ *               logisticFee:
+ *                 type: number
+ *               TnC:
+ *                 type: string
+ *               totalFee:
+ *                 type: number
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
- *               role: invoice
+ *               id: 1
+ *               userId: 2
+ *               talentId: undefined
+ *               managerId: undefined
+ *               agencyId: 5
+ *               clientName: "John Doe"
+ *               clientEmail: "joe@gmail.com"
+ *               eventType: "Concert"
+ *               eventDate: "2022-01-01"
+ *               billOption: "Per Day"
+ *               fee: 1000000
+ *               logisticInfo: "Fully Covered"
+ *               logisticFee: 2000000
+ *               TnC: "By signing this, you agree to our TnC"
+ *               totalFee: 3000000
  *     responses:
  *       "201":
  *         description: Created
@@ -148,7 +172,7 @@ export default router;
 
 /**
  * @swagger
- * /invoice/{id}:
+ * /invoice/{invoiceId}:
  *   get:
  *     summary: Get an invoice
  *     description: Fetch an invoice by id.
@@ -157,7 +181,7 @@ export default router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: invoiceId
  *         required: true
  *         schema:
  *           type: string
@@ -184,7 +208,7 @@ export default router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: invoiceId
  *         required: true
  *         schema:
  *           type: string
@@ -196,21 +220,52 @@ export default router;
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               userId:
  *                 type: string
- *               email:
+ *               talentId:
+ *                 type: string
+ *               managerId:
+ *                 type: string
+ *               agencyId:
+ *                 type: string
+ *               clientName:
+ *                 type: string
+ *               clientEmail:
  *                 type: string
  *                 format: email
  *                 description: must be unique
- *               password:
+ *               eventType:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
+ *               eventDate:
+ *                  type: datetime
+ *               billOption:
+ *                 type: string
+ *               fee:
+ *                 type: number
+ *               logisticInfo:
+ *                 type: string
+ *               logisticFee:
+ *                 type: number
+ *               TnC:
+ *                 type: string
+ *               totalFee:
+ *                 type: number
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
+ *               id: 1
+ *               userId: 2
+ *               talentId: undefined
+ *               managerId: undefined
+ *               agencyId: 5
+ *               clientName: "John Doe"
+ *               clientEmail: "joe@gmail.com"
+ *               eventType: "Concert"
+ *               eventDate: "2022-01-01"
+ *               billOption: "Per Day"
+ *               fee: 1000000
+ *               logisticInfo: "Fully Covered"
+ *               logisticFee: 2000000
+ *               TnC: "By signing this, you agree to our TnC"
+ *               totalFee: 3000000
  *     responses:
  *       "200":
  *         description: OK

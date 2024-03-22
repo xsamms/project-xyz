@@ -152,7 +152,7 @@ export default router;
 
 /**
  * @swagger
- * /calendar/{id}:
+ * /calendar/{calendarId}:
  *   get:
  *     summary: Get a calendar
  *     description: Fetch a calendar by id.
@@ -161,7 +161,7 @@ export default router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: calendarId
  *         required: true
  *         schema:
  *           type: string
@@ -182,13 +182,13 @@ export default router;
  *
  *   patch:
  *     summary: Update a calendar
- *     description: Logged in users can only update their own information. Only admins can update other calendars.
+ *     description: Logged in users can only update their own calendars. Only admins can update other calendars.
  *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: calendarId
  *         required: true
  *         schema:
  *           type: string
@@ -200,21 +200,32 @@ export default router;
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               userId:
  *                 type: string
- *               email:
+ *               eventTitle:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
+ *               description:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
+ *               eventVenue:
+ *                  type: string
+ *               eventCity:
+ *                  type: string
+ *               eventCountry:
+ *                  type: string
+ *               eventDate:
+ *                  type: date
+ *               eventTime:
+ *                  type: datetime
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
+ *               id: 1
+ *               userId: 2
+ *               eventTitle: "Lorem Ipsum"
+ *               description: "Lorem Ipsum Lurem Lurem"
+ *               eventVenue: "Eko Hotel"
+ *               eventCity: "Lagos"
+ *               eventCountry: "Nigeria"
+ *               eventDate: "2022-01-01"
+ *               eventTime: "2022-01-01 12:00:00"
  *     responses:
  *       "200":
  *         description: OK
@@ -233,13 +244,13 @@ export default router;
  *
  *   delete:
  *     summary: Delete a calendar
- *     description: Logged in users can delete only themselves. Only admins can delete other calendars.
+ *     description: Logged in users can delete only their own calendars. Only admins can delete other calendars.
  *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: calendarId
  *         required: true
  *         schema:
  *           type: string

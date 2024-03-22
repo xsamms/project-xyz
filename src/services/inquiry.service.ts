@@ -2,7 +2,7 @@ import { Inquiry, InquiryType, Prisma } from '@prisma/client';
 import httpStatus from 'http-status';
 import prisma from '../client';
 import ApiError from '../utils/ApiError';
-import { encryptPassword } from '../utils/encryption';
+
 
 /**
  * Create a inquiry

@@ -59,6 +59,127 @@ components:
         eventCountry: "Nigeria"
         eventDate: "2022-01-01"
         eventTime: "2024-02-29T00:00:00.000Z"
+    Inquiry:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: number
+        talentId:
+          type: number
+        managerId:
+          type: number
+        agencyId:
+          type: number
+        agencyManagerId:
+          type: number
+        fullName:
+          type: string
+        stageName:
+          type: string
+        email:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+        type:
+          type: string
+          enum: [Booking, Proposal, Collaboration]
+        subject:
+          type: string
+        message:
+          type: string
+        attachment:
+          type: array
+          items:
+            type: string
+        eventType:
+          type: string
+        eventVenue:
+          type: string
+        eventCity:
+          type: string
+        eventCountry:
+          type: string
+        eventDate:
+          type: datetime
+        eventTime:
+          type: datetime
+      example:
+        id: 1
+        userId: 2
+        talentId: undefined
+        managerId: undefined
+        agencyId: 5
+        agencyManagerId: undefined
+        fullName: "John Doe"
+        stageName: "JoeBoyDo"
+        email: "joe@gmail.com"
+        phoneNumber: "09088776655"
+        type: "Booking"
+        subject: "Music Concert"
+        message: "We want you to perform in our Music Concert"
+        attachment: ["file1", "file2"]
+        eventType: "Concert"
+        eventVenue: "Eko Hotel"
+        eventCity: "Lagos"
+        eventCountry: "Nigeria"
+        eventDate: "2022-01-01"
+        eventTime: "2024-02-29T00:00:00.000Z"
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: number
+        talentId:
+          type: number
+        managerId:
+          type: number
+        agencyId:
+          type: number
+        agencyManagerId:
+          type: number
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+          format: email
+        eventType:
+          type: string
+        eventDate:
+          type: datetime
+        billOption:
+          type: string
+        fee:
+          type: number
+        logisticInfo:
+          type: string
+        logisticFee:
+          type: number
+        TnC:
+          type: string
+        totalFee:
+          type: number
+      example:
+        id: 1
+        userId: 2
+        talentId: undefined
+        managerId: undefined
+        agencyId: 5
+        agencyManagerId: undefined
+        clientName: "John Doe"
+        clientEmail: "joe@gmail.com"
+        eventType: "Concert"
+        eventDate: "2022-01-01"
+        billOption: "Per Day"
+        fee: 1000000
+        logisticInfo: "Fully Covered"
+        logisticFee: 2000000
+        TnC: "By signing this, you agree to our TnC"
+        totalFee: 3000000
     Manager:
       type: object
       properties:

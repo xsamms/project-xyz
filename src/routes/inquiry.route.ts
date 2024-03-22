@@ -1,5 +1,5 @@
 import express from 'express';
-import auth from '../middlewares/auth';
+import inquiry from '../middlewares/inquiry';
 import validate from '../middlewares/validate';
 import { inquiryValidation } from '../validations';
 import { inquiryController } from '../controllers';
@@ -8,14 +8,14 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(inquiryValidation.createInquiry), inquiryController.createInquiry)
-  .get(auth('getUsers'), validate(inquiryValidation.getInquiries), inquiryController.getInquiries);
+  .post(inquiry(), validate(inquiryValidation.createInquiry), inquiryController.createInquiry)
+  .get(inquiry('getUsers'), validate(inquiryValidation.getInquiries), inquiryController.getInquiries);
 
 router
   .route('/:inquiryId')
-  .get(auth('getUsers'), validate(inquiryValidation.getInquiry), inquiryController.getInquiry)
-  .patch(auth('manageUsers'), validate(inquiryValidation.updateInquiry), inquiryController.updateInquiry)
-  .delete(auth('manageUsers'), validate(inquiryValidation.deleteInquiry), inquiryController.deleteInquiry);
+  .get(inquiry('getUsers'), validate(inquiryValidation.getInquiry), inquiryController.getInquiry)
+  .patch(inquiry('manageUsers'), validate(inquiryValidation.updateInquiry), inquiryController.updateInquiry)
+  .delete(inquiry('manageUsers'), validate(inquiryValidation.deleteInquiry), inquiryController.deleteInquiry);
 
 export default router;
 
@@ -42,30 +42,71 @@ export default router;
  *           schema:
  *             type: object
  *             required:
- *               - name
- *               - email
- *               - password
- *               - role
+ *               - userId
  *             properties:
- *               name:
+ *               userId:
+ *                 type: string
+ *               talentId:
+ *                 type: string
+ *               managerId:
+ *                 type: string
+ *               agencyId:
+ *                 type: string
+ *               agencyManagerId:
+ *                 type: string
+ *               fullName:
+ *                 type: string
+ *               stageName:
  *                 type: string
  *               email:
  *                 type: string
  *                 format: email
  *                 description: must be unique
- *               password:
+ *               phoneNumber:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *               role:
+ *               type:
+ *                 type: string
+ *               subject:
+ *                 type: string
+ *               message:
+ *                 type: string
+ *               attachment:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               eventType:
+ *                 type: string
+ *               eventVenue:
  *                  type: string
- *                  enum: [inquiry, admin]
+ *               eventCity:
+ *                  type: string
+ *               eventCountry:
+ *                  type: string
+ *               eventDate:
+ *                  type: datetime
+ *               eventTime:
+ *                  type: datetime
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
- *               role: inquiry
+ *               id: 1
+ *               userId: 2
+ *               talentId: undefined
+ *               managerId: undefined
+ *               agencyId: 5
+ *               agencyManagerId: undefined
+ *               fullName: "John Doe"
+ *               stageName: "JoeBoyDo"
+ *               email: "joe@gmail.com"
+ *               phoneNumber: "09088776655"
+ *               type: "Booking"
+ *               subject: "Music Concert"
+ *               message: "We want you to perform in our Music Concert"
+ *               attachment: ["file1", "file2"]
+ *               eventType: "Concert"
+ *               eventVenue: "Eko Hotel"
+ *               eventCity: "Lagos"
+ *               eventCountry: "Nigeria"
+ *               eventDate: "2022-01-01"
+ *               eventTime: "2022-01-01 12:00:00"
  *     responses:
  *       "201":
  *         description: Created
@@ -148,7 +189,7 @@ export default router;
 
 /**
  * @swagger
- * /inquiry/{id}:
+ * /inquiry/{inquiryId}:
  *   get:
  *     summary: Get an inquiry
  *     description: Fetch an inquiry by id.
@@ -157,7 +198,7 @@ export default router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: inquiryId
  *         required: true
  *         schema:
  *           type: string
@@ -178,13 +219,13 @@ export default router;
  *
  *   patch:
  *     summary: Update an inquiry
- *     description: Logged in users can only update their own information. Only admins can update other inquirys.
+ *     description: Logged in users can only update their own inquiries. Only admins can update other inquiries.
  *     tags: [Inquiry]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: inquiryId
  *         required: true
  *         schema:
  *           type: string
@@ -196,21 +237,69 @@ export default router;
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               userId:
+ *                 type: string
+ *               talentId:
+ *                 type: string
+ *               managerId:
+ *                 type: string
+ *               agencyId:
+ *                 type: string
+ *               agencyManagerId:
+ *                 type: string
+ *               fullName:
+ *                 type: string
+ *               stageName:
  *                 type: string
  *               email:
  *                 type: string
  *                 format: email
  *                 description: must be unique
- *               password:
+ *               phoneNumber:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
+ *               type:
+ *                 type: string
+ *               subject:
+ *                 type: string
+ *               message:
+ *                 type: string
+ *               attachment:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               eventType:
+ *                 type: string
+ *               eventVenue:
+ *                  type: string
+ *               eventCity:
+ *                  type: string
+ *               eventCountry:
+ *                  type: string
+ *               eventDate:
+ *                  type: datetime
+ *               eventTime:
+ *                  type: datetime
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
+ *               id: 1
+ *               userId: 2
+ *               talentId: undefined
+ *               managerId: undefined
+ *               agencyId: 5
+ *               agencyManagerId: undefined
+ *               fullName: "John Doe"
+ *               stageName: "JoeBoyDo"
+ *               email: "joe@gmail.com"
+ *               phoneNumber: "09088776655"
+ *               type: "Booking"
+ *               subject: "Music Concert"
+ *               message: "We want you to perform in our Music Concert"
+ *               attachment: ["file1", "file2"]
+ *               eventType: "Concert"
+ *               eventVenue: "Eko Hotel"
+ *               eventCity: "Lagos"
+ *               eventCountry: "Nigeria"
+ *               eventDate: "2022-01-01"
+ *               eventTime: "2022-01-01 12:00:00"
  *     responses:
  *       "200":
  *         description: OK
@@ -229,7 +318,7 @@ export default router;
  *
  *   delete:
  *     summary: Delete an inquiry
- *     description: Logged in users can delete only themselves. Only admins can delete other inquirys.
+ *     description: Logged in users can delete only their own inquiries. Only admins can delete other inquiries.
  *     tags: [Inquiry]
  *     security:
  *       - bearerAuth: []
