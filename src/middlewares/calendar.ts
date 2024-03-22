@@ -5,8 +5,7 @@ import { roleRights } from '../config/roles';
 import { NextFunction, Request, Response } from 'express';
 import { User, PrismaClient } from '@prisma/client';
 
-const managa = new PrismaClient().manager;
-
+const calenda = new PrismaClient().calendar;
 
 const verifyCallback =
   (
@@ -21,7 +20,7 @@ const verifyCallback =
     }
     req.user = user;
 
-    const manage = await managa.findFirst({
+    const calend = await calenda.findFirst({
       where: {
         userId: user.id
       }
@@ -29,19 +28,19 @@ const verifyCallback =
 
     if (requiredRights.length) {
       const userRights = roleRights.get(user.role) ?? [];
-      const hasRequiredRights = requiredRights.every((requiredRight) =>
-      userRights.includes(requiredRight)
+      const hasRequiredRights = requiredRights.every((requiredRights) =>
+      userRights.includes(requiredRights)
       );
-      if (!hasRequiredRights && req.params.userId != manage?.id) {
+      console.log(hasRequiredRights, req.params.calendarId, calend?.id)
+      if (!hasRequiredRights && req.params.calendarId != calend?.id) {
         return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
       }
     }
-
     
     resolve();
   };
   
-  const manager =
+  const agency =
   (...requiredRights: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     return new Promise((resolve, reject) => {
@@ -55,4 +54,4 @@ const verifyCallback =
       .catch((err) => next(err));
   };
 
-export default manager;
+export default agency;

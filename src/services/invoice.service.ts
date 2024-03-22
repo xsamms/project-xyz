@@ -10,6 +10,7 @@ import { encryptPassword } from '../utils/encryption';
  * @returns {Promise<Invoice>}
  */
 const createInvoice = async (
+    userId: number,
     talentId: number,
     agencyId: number,
     managerId: number,
@@ -27,6 +28,7 @@ const createInvoice = async (
   
   return prisma.invoice.create({
     data: {
+        userId,
         talentId,
         agencyId,
         managerId,
@@ -64,6 +66,7 @@ const queryInvoices = async <Key extends keyof Invoice>(
   },
   keys: Key[] = [
     'id',
+    'userId',
     'talentId',
     'agencyId',
     'managerId',
@@ -105,6 +108,7 @@ const getInvoiceById = async <Key extends keyof Invoice>(
   id: number,
   keys: Key[] = [
     'id',
+    'userId',
     'talentId',
     'agencyId',
     'managerId',
@@ -172,9 +176,9 @@ const getInvoiceById = async <Key extends keyof Invoice>(
 const updateInvoiceById = async <Key extends keyof Invoice>(
   invoiceId: number,
   updateBody: Prisma.InvoiceUpdateInput,
-  keys: Key[] = ['id', 'talentId', 'agencyId', 'managerId', 'clientName', 'clientEmail', 'eventType', 'eventDate', 'billOption', 'fee', 'logisticInfo', 'logisticFee', 'TnC', 'totalFee'] as Key[]
+  keys: Key[] = ['id', 'userId', 'talentId', 'agencyId', 'managerId', 'clientName', 'clientEmail', 'eventType', 'eventDate', 'billOption', 'fee', 'logisticInfo', 'logisticFee', 'TnC', 'totalFee'] as Key[]
 ): Promise<Pick<Invoice, Key> | null> => {
-  const invoice = await getInvoiceById(invoiceId, ['id', 'talentId', 'agencyId', 'managerId', 'clientName', 'clientEmail', 'eventType', 'eventDate', 'billOption', 'fee', 'logisticInfo', 'logisticFee', 'TnC', 'totalFee']);
+  const invoice = await getInvoiceById(invoiceId, ['id', 'userId', 'talentId', 'agencyId', 'managerId', 'clientName', 'clientEmail', 'eventType', 'eventDate', 'billOption', 'fee', 'logisticInfo', 'logisticFee', 'TnC', 'totalFee']);
   if (!invoice) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Invoice not found');
   }

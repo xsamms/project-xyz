@@ -28,6 +28,37 @@ components:
         address: "12, Isaac John Str, GRA, Ikeja"
         state: "Lagos"
         country: "Nigeria"
+    Calendar:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: number
+        eventTitle:
+          type: string
+        description:
+          type: string
+        eventVenue:
+          type: string
+        eventCity:
+          type: string
+        eventCountry:
+          type: string
+        eventDate:
+          type: datetime
+        eventTime:
+          type: datetime
+      example:
+        id: 1
+        userId: 2
+        eventTitle: "Lorem Ipsum"
+        description: "Lorem Ipsum Lurem Lurem"
+        eventVenue: "Eko Hotel"
+        eventCity: "Lagos"
+        eventCountry: "Nigeria"
+        eventDate: "2022-01-01"
+        eventTime: "2024-02-29T00:00:00.000Z"
     Manager:
       type: object
       properties:

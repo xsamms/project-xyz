@@ -6,6 +6,6 @@ export { default as agencyService } from './agency.service';
 export { default as agencyManagerService } from './agencyManager.service';
 export { default as managerService } from './manager.service';
 export { default as talentService } from './talent.service';
-export { default as calenderService } from './calender.service';
+export { default as calendarService } from './calendar.service';
 export { default as inquiryService } from './inquiry.service';
 export { default as invoiceService } from './invoice.service';

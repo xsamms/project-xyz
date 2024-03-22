@@ -8,7 +8,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(invoiceValidation.createInvoice), invoiceController.createInvoice)
+  .post(auth(), validate(invoiceValidation.createInvoice), invoiceController.createInvoice)
   .get(auth('getUsers'), validate(invoiceValidation.getInvoices), invoiceController.getInvoices);
 
 router

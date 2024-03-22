@@ -10,6 +10,7 @@ import { encryptPassword } from '../utils/encryption';
  * @returns {Promise<Inquiry>}
  */
 const createInquiry = async (
+    userId: number,
     talentId: number,
     agencyId: number,
     managerId: number,
@@ -34,6 +35,7 @@ const createInquiry = async (
   }
   return prisma.inquiry.create({
     data: {
+        userId,
         talentId,
         agencyId,
         managerId,
@@ -76,6 +78,7 @@ const queryInquiries = async <Key extends keyof Inquiry>(
   },
   keys: Key[] = [
     'id',
+    'userId',
     'talentId',
     'agencyId',
     'managerId',
@@ -121,6 +124,7 @@ const getInquiryById = async <Key extends keyof Inquiry>(
   id: number,
   keys: Key[] = [
     'id',
+    'userId',
     'talentId',
     'agencyId',
     'managerId',
@@ -158,6 +162,7 @@ const getInquiryByEmail = async <Key extends keyof Inquiry>(
   email: string,
   keys: Key[] = [
     'id',
+    'userId',
     'talentId',
     'agencyId',
     'managerId',
@@ -196,9 +201,9 @@ const getInquiryByEmail = async <Key extends keyof Inquiry>(
 const updateInquiryById = async <Key extends keyof Inquiry>(
   inquiryId: number,
   updateBody: Prisma.InquiryUpdateInput,
-  keys: Key[] = ['id', 'talentId', 'agencyId', 'managerId', 'agencyManagerId', 'fullName', 'stageName', 'email', 'phoneNumber', 'type', 'subject', 'message', 'attachment', 'eventVenue', 'eventCity', 'eventCountry', 'eventDate', 'eventTime'] as Key[]
+  keys: Key[] = ['id', 'userId', 'talentId', 'agencyId', 'managerId', 'agencyManagerId', 'fullName', 'stageName', 'email', 'phoneNumber', 'type', 'subject', 'message', 'attachment', 'eventVenue', 'eventCity', 'eventCountry', 'eventDate', 'eventTime'] as Key[]
 ): Promise<Pick<Inquiry, Key> | null> => {
-  const inquiry = await getInquiryById(inquiryId, ['id', 'talentId', 'agencyId', 'managerId', 'agencyManagerId', 'fullName', 'stageName', 'email', 'phoneNumber', 'type', 'subject', 'message', 'attachment', 'eventVenue', 'eventCity', 'eventCountry', 'eventDate', 'eventTime']);
+  const inquiry = await getInquiryById(inquiryId, ['id', 'userId', 'talentId', 'agencyId', 'managerId', 'agencyManagerId', 'fullName', 'stageName', 'email', 'phoneNumber', 'type', 'subject', 'message', 'attachment', 'eventVenue', 'eventCity', 'eventCountry', 'eventDate', 'eventTime']);
   if (!inquiry) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Inquiry not found');
   }

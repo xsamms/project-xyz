@@ -5,8 +5,8 @@ import catchAsync from '../utils/catchAsync';
 import { invoiceService } from '../services';
 
 const createInvoice = catchAsync(async (req, res) => {
-  const { talentId, agencyId, managerId, clientName, clientEmail, eventType, eventDate, billOption, fee, logisticInfo, logisticFee, TnC, totalFee} = req.body;
-  const invoice = await invoiceService.createInvoice(talentId, agencyId, managerId, clientName, clientEmail, eventType, eventDate, billOption, fee, logisticInfo, logisticFee, TnC, totalFee);
+  const { userId, talentId, agencyId, managerId, clientName, clientEmail, eventType, eventDate, billOption, fee, logisticInfo, logisticFee, TnC, totalFee} = req.body;
+  const invoice = await invoiceService.createInvoice( userId, talentId, agencyId, managerId, clientName, clientEmail, eventType, eventDate, billOption, fee, logisticInfo, logisticFee, TnC, totalFee);
   res.status(httpStatus.CREATED).send(invoice);
 });
 

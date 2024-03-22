@@ -4,6 +4,7 @@ import Joi from 'joi';
 
 const createInquiry = {
   body: Joi.object().keys({
+    userId: Joi.number(),
     talentId: Joi.number(),
     agencyId: Joi.number(),
     managerId: Joi.number(),

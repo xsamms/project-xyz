@@ -39,7 +39,10 @@ const sendResetPasswordEmail = async (to: string, token: string) => {
   const resetPasswordUrl = `http://18.206.126.109/api/auth/reset-password?token=${token}`;
   const text = `Dear user,
   
-To reset your password, click on this link (or copy to your browser): ${resetPasswordUrl}
+To reset your password, click on this link: 
+
+${resetPasswordUrl}
+
 If you did not request any password resets, then ignore this email.`;
   await sendEmail(to, subject, text);
 };
@@ -56,7 +59,9 @@ const sendVerificationEmail = async (to: string, token: string ) => {
   const verificationEmailUrl = `http://18.206.126.109/api/auth/verify-email?token=${token}`;
   const text = `Dear user,
   
-To verify your email, click on this link (or copy to your browser): ${verificationEmailUrl}`;
+To verify your email, click on this link: 
+
+${verificationEmailUrl}`;
   await sendEmail(to, subject, text);
 };
 

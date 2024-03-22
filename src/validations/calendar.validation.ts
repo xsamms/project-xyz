@@ -2,12 +2,9 @@ import { Role } from '@prisma/client';
 import Joi from 'joi';
 import { password } from './custom.validation';
 
-const createCalender = {
+const createCalendar = {
   body: Joi.object().keys({
-    talentId: Joi.number(),
-    agencyId: Joi.number(),
-    managerId: Joi.number(),
-    agencyManagerId: Joi.number(),
+    userId: Joi.number().integer().required(),
     eventTitle: Joi.string(),
     description: Joi.string(),
     eventVenue: Joi.string(),
@@ -18,7 +15,7 @@ const createCalender = {
   })
 };
 
-const getCalenders = {
+const getCalendars = {
   query: Joi.object().keys({
     EventTitle: Joi.string(),
     sortBy: Joi.string(),
@@ -27,13 +24,13 @@ const getCalenders = {
   })
 };
 
-const getCalender = {
+const getCalendar = {
   params: Joi.object().keys({
     calenderId: Joi.number().integer()
   })
 };
 
-const updateCalender = {
+const updateCalendar = {
   params: Joi.object().keys({
     calenderId: Joi.number().integer()
   }),
@@ -50,16 +47,16 @@ const updateCalender = {
     .min(1)
 };
 
-const deleteCalender = {
+const deleteCalendar = {
   params: Joi.object().keys({
     calenderId: Joi.number().integer()
   })
 };
 
 export default {
-  createCalender,
-  getCalenders,
-  getCalender,
-  updateCalender,
-  deleteCalender
+  createCalendar,
+  getCalendars,
+  getCalendar,
+  updateCalendar,
+  deleteCalendar
 };

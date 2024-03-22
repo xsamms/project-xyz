@@ -3,7 +3,9 @@ import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import { roleRights } from '../config/roles';
 import { NextFunction, Request, Response } from 'express';
-import { User } from '@prisma/client';
+import { User, PrismaClient } from '@prisma/client';
+
+const agenc = new PrismaClient().agency;
 
 const verifyCallback =
   (
@@ -18,12 +20,18 @@ const verifyCallback =
     }
     req.user = user;
 
+    const agecy = await agenc.findFirst({
+      where: {
+        userId: user.id
+      }
+    })
+
     if (requiredRights.length) {
       const userRights = roleRights.get(user.role) ?? [];
       const hasRequiredRights = requiredRights.every((requiredRights) =>
       userRights.includes(requiredRights)
       );
-      if (!hasRequiredRights && req.params.agencyId != user.id) {
+      if (!hasRequiredRights && req.params.agencyId != agecy?.id) {
         return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
       }
     }

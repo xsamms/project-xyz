@@ -2764,11 +2764,6 @@ google-auth-library@^9.0.0:
     gtoken "^7.0.0"
     jws "^4.0.0"
 
-googleapi@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/googleapi/-/googleapi-1.0.2.tgz"
-  integrity sha512-NXWkHxs1TVa4ZRZZnt9DvRkNTsopnN4fkXm9RI5lj0iINh/tk2f0TiMQ3nC5XH4FEEi94jupVvyH7cCKd3lRsw==
-
 googleapis-common@^7.0.0:
   version "7.0.1"
   resolved "https://registry.npmjs.org/googleapis-common/-/googleapis-common-7.0.1.tgz"

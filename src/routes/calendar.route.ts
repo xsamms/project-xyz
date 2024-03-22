@@ -1,38 +1,38 @@
 import express from 'express';
-import auth from '../middlewares/auth';
+import calendar from '../middlewares/calendar';
 import validate from '../middlewares/validate';
-import { calenderValidation } from '../validations';
-import { calenderController } from '../controllers';
+import { calendarValidation } from '../validations';
+import { calendarController } from '../controllers';
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageCalenders'), validate(calenderValidation.createCalender), calenderController.createCalender)
-  .get(auth('getCalenders'), validate(calenderValidation.getCalenders), calenderController.getCalenders);
+  .post(calendar(), validate(calendarValidation.createCalendar), calendarController.createCalendar)
+  .get(calendar('getUsers'), validate(calendarValidation.getCalendars), calendarController.getCalendars);
 
 router
-  .route('/:calenderId')
-  .get(auth('getCalenders'), validate(calenderValidation.getCalender), calenderController.getCalender)
-  .patch(auth('manageCalenders'), validate(calenderValidation.updateCalender), calenderController.updateCalender)
-  .delete(auth('manageCalenders'), validate(calenderValidation.deleteCalender), calenderController.deleteCalender);
+  .route('/:calendarId')
+  .get(calendar('getUsers'), validate(calendarValidation.getCalendar), calendarController.getCalendar)
+  .patch(calendar('manageUsers'), validate(calendarValidation.updateCalendar), calendarController.updateCalendar)
+  .delete(calendar('manageUsers'), validate(calendarValidation.deleteCalendar), calendarController.deleteCalendar);
 
 export default router;
 
 /**
  * @swagger
  * tags:
- *   name: Calender
- *   description: Calender management and retrieval
+ *   name: Calendar
+ *   description: Calendar management and retrieval
  */
 
 /**
  * @swagger
- * /calender:
+ * /calendar:
  *   post:
- *     summary: Create a calender
- *     description: Create calender.
- *     tags: [Calender]
+ *     summary: Create a calendar
+ *     description: Create calendar.
+ *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -42,37 +42,41 @@ export default router;
  *           schema:
  *             type: object
  *             required:
- *               - name
- *               - email
- *               - password
- *               - role
+ *               - userId
  *             properties:
- *               name:
+ *               userId:
  *                 type: string
- *               email:
+ *               eventTitle:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
+ *               description:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *               role:
+ *               eventVenue:
  *                  type: string
- *                  enum: [calender, admin]
+ *               eventCity:
+ *                  type: string
+ *               eventCountry:
+ *                  type: string
+ *               eventDate:
+ *                  type: date
+ *               eventTime:
+ *                  type: datetime
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
- *               role: calender
+ *               id: 1
+ *               userId: 2
+ *               eventTitle: "Lorem Ipsum"
+ *               description: "Lorem Ipsum Lurem Lurem"
+ *               eventVenue: "Eko Hotel"
+ *               eventCity: "Lagos"
+ *               eventCountry: "Nigeria"
+ *               eventDate: "2022-01-01"
+ *               eventTime: "2022-01-01 12:00:00"
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Calender'
+ *                $ref: '#/components/schemas/Calendar'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -81,9 +85,9 @@ export default router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all calenders
- *     description: Retrieve all calenders.
- *     tags: [Calender]
+ *     summary: Get all calendars
+ *     description: Retrieve all calendars.
+ *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -91,12 +95,12 @@ export default router;
  *         name: name
  *         schema:
  *           type: string
- *         description: Calender name
+ *         description: Calendar name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: Calender role
+ *         description: Calendar role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -108,7 +112,7 @@ export default router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of calenders
+ *         description: Maximum number of calendars
  *       - in: query
  *         name: page
  *         schema:
@@ -127,7 +131,7 @@ export default router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Calender'
+ *                     $ref: '#/components/schemas/Calendar'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -148,11 +152,11 @@ export default router;
 
 /**
  * @swagger
- * /calender/{id}:
+ * /calendar/{id}:
  *   get:
- *     summary: Get a calender
- *     description: Fetch a calender by id.
- *     tags: [Calender]
+ *     summary: Get a calendar
+ *     description: Fetch a calendar by id.
+ *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -161,14 +165,14 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Calender id
+ *         description: Calendar id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Calender'
+ *                $ref: '#/components/schemas/Calendar'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -177,9 +181,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a calender
- *     description: Logged in users can only update their own information. Only admins can update other calenders.
- *     tags: [Calender]
+ *     summary: Update a calendar
+ *     description: Logged in users can only update their own information. Only admins can update other calendars.
+ *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,7 +192,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Calender id
+ *         description: Calendar id
  *     requestBody:
  *       required: true
  *       content:
@@ -217,7 +221,7 @@ export default router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Calender'
+ *                $ref: '#/components/schemas/Calendar'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -228,9 +232,9 @@ export default router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a calender
- *     description: Logged in users can delete only themselves. Only admins can delete other calenders.
- *     tags: [Calender]
+ *     summary: Delete a calendar
+ *     description: Logged in users can delete only themselves. Only admins can delete other calendars.
+ *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -239,7 +243,7 @@ export default router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Calender id
+ *         description: Calendar id
  *     responses:
  *       "200":
  *         description: No content
