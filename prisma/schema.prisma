@@ -131,14 +131,15 @@ model Manager {
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  subject   String
-  message   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  usersId   Int
-  user      User     @relation(fields: [usersId], references: [id])
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  subject    String
+  message    String
+  attachment String[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  usersId    Int
+  user       User     @relation(fields: [usersId], references: [id])
 }
 
 model Talent {
