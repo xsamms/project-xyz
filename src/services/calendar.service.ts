@@ -19,10 +19,7 @@ const createCalendar = async (
   eventDate: Date,
   eventTime: Date
 ): Promise<Calendar> => {
-  const user = await getCalendarByUserId(userId);
-  if (user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User already have a Calendar');
-  }
+  
   return prisma.calendar.create({
     data: {
       userId,
@@ -113,8 +110,8 @@ const getCalendarById = async <Key extends keyof Calendar>(
 
 
 /**
- * Get calendar by id
- * @param {ObjectId} id
+ * Get calendar by userId
+ * @param {ObjectId} userId
  * @param {Array<Key>} keys
  * @returns {Promise<Pick<Calendar, Key> | null>}
  */
@@ -133,11 +130,12 @@ const getCalendarByUserId = async <Key extends keyof Calendar>(
     'createdAt',
     'updatedAt'
   ] as Key[]
-): Promise<Pick<Calendar, Key> | null> => {
-  return prisma.calendar.findUnique({
+): Promise<Pick<Calendar, Key>[]> => {
+  const calendar = prisma.calendar.findMany({
     where: { userId },
     select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
-  }) as Promise<Pick<Calendar, Key> | null>;
+  });
+   return calendar as Promise<Pick<Calendar, Key>[]>;
 };
 
 

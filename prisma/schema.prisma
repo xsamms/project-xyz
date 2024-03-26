@@ -46,7 +46,7 @@ model AgencyManager {
 
 model Calendar {
   id           Int      @id @default(autoincrement())
-  userId       Int      @unique
+  userId       Int
   eventTitle   String
   description  String
   eventVenue   String
@@ -199,7 +199,7 @@ model User {
   inquiries        Inquiry[]
   invoices         Invoice[]
   agency           Agency?
-  calendar         Calendar?
+  calendar         Calendar[]
   manager          Manager?
   talent           Talent?
   agencyManager    AgencyManager?
