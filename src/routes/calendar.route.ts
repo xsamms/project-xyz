@@ -1,5 +1,6 @@
 import express from 'express';
 import calendar from '../middlewares/calendar';
+import auth from '../middlewares/auth';
 import validate from '../middlewares/validate';
 import { calendarValidation } from '../validations';
 import { calendarController } from '../controllers';
@@ -17,6 +18,9 @@ router
   .patch(calendar('manageUsers'), validate(calendarValidation.updateCalendar), calendarController.updateCalendar)
   .delete(calendar('manageUsers'), validate(calendarValidation.deleteCalendar), calendarController.deleteCalendar);
 
+router
+  .route('/user/:userId')
+  .get(auth('getUsers'), validate(calendarValidation.getCalendarByUserId), calendarController.getCalendarByUserId)
 export default router;
 
 /**
@@ -258,6 +262,37 @@ export default router;
  *     responses:
  *       "200":
  *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /calendar/user{userId}:
+ *   get:
+ *     summary: Get calendar by userId
+ *     description: Fetch all calendar by userId.
+ *     tags: [Calendar]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Calendar'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

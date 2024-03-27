@@ -30,6 +30,12 @@ const getCalendar = {
   })
 };
 
+const getCalendarByUserId = {
+  params: Joi.object().keys({
+    userId: Joi.number().integer()
+  })
+};
+
 const updateCalendar = {
   params: Joi.object().keys({
     calendarId: Joi.number().integer()
@@ -57,6 +63,7 @@ export default {
   createCalendar,
   getCalendars,
   getCalendar,
+  getCalendarByUserId,
   updateCalendar,
   deleteCalendar
 };

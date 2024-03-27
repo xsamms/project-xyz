@@ -25,6 +25,15 @@ const getCalendar = catchAsync(async (req, res) => {
   res.send(calendar);
 });
 
+
+const getCalendarByUserId = catchAsync(async (req, res) => {
+  const calendar = await calendarService.getCalendarByUserId(req.params.userId);
+  if (!calendar) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Calendar not found');
+  }
+  res.send(calendar);
+});
+
 const updateCalendar = catchAsync(async (req, res) => {
   const calendar = await calendarService.updateCalendarById(req.params.calendarId, req.body);
   res.send(calendar);
@@ -39,6 +48,7 @@ export default {
   createCalendar,
   getCalendars,
   getCalendar,
+  getCalendarByUserId,
   updateCalendar,
   deleteCalendar
 };
