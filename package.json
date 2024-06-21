@@ -1,7 +1,7 @@
 {
-  "name": "projectX",
+  "name": "project_XYZ",
   "version": "1.0.0",
-  "description": "PROJECT X REST API with Node JS, TypeScript, Express and Prisma",
+  "description": "PROJECT XYZ REST API with Node JS, TypeScript, Express and Prisma",
   "main": "src/index.ts",
   "repository": "",
   "scripts": {
